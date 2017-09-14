@@ -29,20 +29,16 @@ public class ProdServletForApp extends HttpServlet {
 	
 	private final static String CONTENT_TYPE = "text/html; charset=UTF-8";
 	
-	private ProdService prodSvc = new ProdService();
-	private List<ProdVO> list = prodSvc.getAllToJSON();
-	private ProdVO prodVO;
+	private ProdService prodSvc;
+	private List<ProdVO> list;
+//	private ProdVO prodVO ;
 	private List<ProdVO> prodList;
 	private List<byte[]> prodImage;
     
     
 	@Override
 	public void init() throws ServletException {
-		super.init();
-		prodList = new ArrayList<ProdVO>();
-		for(ProdVO list : list){
-			prodList.add(list);
-		}	
+		super.init();	
 	}
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -56,9 +52,12 @@ public class ProdServletForApp extends HttpServlet {
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
-		
+			
 		request.setCharacterEncoding("UTF-8");
+		
+		prodSvc = new ProdService();
+		
+		
 		Gson gson = new Gson();
 		BufferedReader br = request.getReader();
 		StringBuilder jsonIn= new StringBuilder();
@@ -72,13 +71,17 @@ public class ProdServletForApp extends HttpServlet {
 		System.out.println("action : " + action );
 		String outStr= "";
 		if(action.equals("getAll")){
-//			outStr = gson.toJson(prodList);
+			list = prodSvc.getAllNoImg();
+			prodList = new ArrayList<ProdVO>();
+			for(ProdVO list : list){
+				prodList.add(list);
+			}
 			outStr = gson.toJson(list);
-		}else if( action.equals("getImage")){
+		}else if(action.equals("getImage")){
 			OutputStream os = response.getOutputStream();
 			String prod_no = jsonObject.get("prod_no").getAsString();
 			int imageSize = jsonObject.get("imageSize").getAsInt();
-			prodImage = prodSvc.getImage(prod_no);
+			prodImage = prodSvc.getImageByPK(prod_no);
 			byte[] prod_pic1 = prodImage.get(0);
 			if(prod_pic1 != null){
 				prod_pic1 = ImageUtil.shrink(prod_pic1, imageSize);
@@ -86,7 +89,22 @@ public class ProdServletForApp extends HttpServlet {
 				response.setContentLength(prod_pic1.length);
 			}
 			os.write(prod_pic1);
-		}else{
+		}else if(action.equals("getQueryResult")){
+			String bean_contry = jsonObject.get("bean_contry").getAsString();
+			String proc = jsonObject.get("proc").getAsString();
+			String roast = jsonObject.get("roast").getAsString();
+			String prod_name = jsonObject.get("prod_name").getAsString();
+			
+			list = prodSvc.getQueryResult(bean_contry, proc, roast, prod_name);
+			
+			prodList = new ArrayList<ProdVO>();
+			for(ProdVO list : list){
+				prodList.add(list);
+			}
+			outStr = gson.toJson(list);
+		}
+		
+		else{
 			doGet(request, response);
 		}
 		
