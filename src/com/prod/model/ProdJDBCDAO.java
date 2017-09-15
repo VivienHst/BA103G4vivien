@@ -678,14 +678,15 @@ public class ProdJDBCDAO implements ProdDAO_interface {
 //      updateTest(dao);
 //      getQueryResultTest("衣索比亞", "水洗", "中焙", "%gg%");
 //		dao.delete("P1000000019");
-//		getImageTest(dao);
+		getImageByPKTest(dao);
 //		getAllTest(dao);
 //		getAllNoImgTest(dao);
 		//只新增照片方法，暫為測試用
-		for(int i = 1; i<6 ;i++){
-			String prod_no = "P100000000" + i;
-			updateImg1Test(dao,prod_no ,"C:\\Users\\Java\\Desktop\\專題用圖片\\product\\prod0"+i+".jpg" );
-		}
+//		for(int i = 9; i<14 ;i++){
+//			String prod_no = "P100000000" + i;
+//			int j=i-8;
+//			updateImg1Test(dao,prod_no ,"C:\\Users\\Java\\Desktop\\專題用圖片\\product\\prod0" + j + ".jpg" );
+//		}
 		
 	}
 	

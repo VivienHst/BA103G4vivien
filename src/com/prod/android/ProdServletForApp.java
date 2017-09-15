@@ -57,10 +57,9 @@ public class ProdServletForApp extends HttpServlet {
 		
 		prodSvc = new ProdService();
 		
-		
 		Gson gson = new Gson();
 		BufferedReader br = request.getReader();
-		StringBuilder jsonIn= new StringBuilder();
+		StringBuilder jsonIn = new StringBuilder();
 		String line = null;
 		while((line = br.readLine()) != null){
 			jsonIn.append(line);
@@ -70,7 +69,7 @@ public class ProdServletForApp extends HttpServlet {
 		JsonObject jsonObject = gson.fromJson(jsonIn.toString(), JsonObject.class);
 		String action = jsonObject.get("action").getAsString();
 		System.out.println("action : " + action );
-		String outStr= "";
+		String outStr = "";
 		if(action.equals("getAll")){
 			list = prodSvc.getAllNoImg();
 			prodList = new ArrayList<ProdVO>();
