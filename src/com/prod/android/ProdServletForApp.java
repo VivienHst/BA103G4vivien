@@ -65,6 +65,7 @@ public class ProdServletForApp extends HttpServlet {
 		while((line = br.readLine()) != null){
 			jsonIn.append(line);
 		}
+		br.close();
 		
 		JsonObject jsonObject = gson.fromJson(jsonIn.toString(), JsonObject.class);
 		String action = jsonObject.get("action").getAsString();
@@ -77,6 +78,9 @@ public class ProdServletForApp extends HttpServlet {
 				prodList.add(list);
 			}
 			outStr = gson.toJson(list);
+			response.setContentType(CONTENT_TYPE);
+			PrintWriter out = response.getWriter();
+			out.println(outStr);
 		}else if(action.equals("getImage")){
 			OutputStream os = response.getOutputStream();
 			String prod_no = jsonObject.get("prod_no").getAsString();
@@ -89,6 +93,9 @@ public class ProdServletForApp extends HttpServlet {
 				response.setContentLength(prod_pic1.length);
 			}
 			os.write(prod_pic1);
+			os.flush();
+			os.close();
+			
 		}else if(action.equals("getQueryResult")){
 			String bean_contry = jsonObject.get("bean_contry").getAsString();
 			String proc = jsonObject.get("proc").getAsString();
@@ -102,15 +109,18 @@ public class ProdServletForApp extends HttpServlet {
 				prodList.add(list);
 			}
 			outStr = gson.toJson(list);
+			response.setContentType(CONTENT_TYPE);
+			PrintWriter out = response.getWriter();
+			out.println(outStr);
 		}
 		
 		else{
 			doGet(request, response);
 		}
 		
-		response.setContentType(CONTENT_TYPE);
-		PrintWriter out = response.getWriter();
-		out.println(outStr);
+//		response.setContentType(CONTENT_TYPE);
+//		PrintWriter out = response.getWriter();
+//		out.println(outStr);
 	}
 
 }

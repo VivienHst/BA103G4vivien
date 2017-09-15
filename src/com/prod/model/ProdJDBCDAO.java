@@ -12,7 +12,7 @@ public class ProdJDBCDAO implements ProdDAO_interface {
 	
 	String driver = "oracle.jdbc.driver.OracleDriver";
 	String url = "jdbc:oracle:thin:@localhost:1521:XE";
-	String userid = "vivien";
+	String userid = "ba103g4";
 	String passwd = "123456";
 	private static final String INSERT_STMT = "INSERT INTO PROD VALUES ('P'||prod_NO_seq.NEXTVAL,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 
@@ -50,7 +50,7 @@ public class ProdJDBCDAO implements ProdDAO_interface {
 	private static final String GET_ALL_STMT = "SELECT * FROM PROD";
 	private static final String GET_ONE_STMT = "SELECT * FROM PROD WHERE PROD_NO = ?";
 	
-	private static final String GET_ALL_NO_IMG_STMT = "SELECT"
+	private static final String GET_ALL_NO_IMG_STMT = "SELECT "
 			+ "PROD_NO,"
 			+ "STORE_NO," 
 			+ "PROD_NAME," 
@@ -75,11 +75,14 @@ public class ProdJDBCDAO implements ProdDAO_interface {
 			+ "PROD_SUP," 
 			+ "PROD_CONT,"
 			+ "PROD_STAT," 
-			+ "ED_TIME"
+			+ "ED_TIME "
 			+ "FROM PROD";
 	
 	private static final String GET_IMG_BY_PK_STMT = "SELECT PROD_PIC1,PROD_PIC2,PROD_PIC3 FROM PROD WHERE PROD_NO = ?"; 
 	private static final String GET_QUERY_RESULT = "SELECT * FROM PROD WHERE BEAN_CONTRY LIKE ? AND PROC LIKE ? AND ROAST LIKE ? AND PROD_NAME LIKE ?";
+	
+	//快速更改資料庫圖片(測試用)
+	private static final String UPDATE_IMG1 = "UPDATE PROD SET PROD_PIC1 =? WHERE PROD_NO =?";
 	
 	@Override
 	public void insert(ProdVO prodVO) {
@@ -547,7 +550,7 @@ public class ProdJDBCDAO implements ProdDAO_interface {
 	}
 	
 	@Override
-		public List<ProdVO> getQueryResult(String bean_contry, String proc, String roast, String prod_name) {
+	public List<ProdVO> getQueryResult(String bean_contry, String proc, String roast, String prod_name) {
 			List<ProdVO> list = new ArrayList<ProdVO>();
 			ProdVO prodVO = null;
 			Connection con = null;
@@ -629,16 +632,61 @@ public class ProdJDBCDAO implements ProdDAO_interface {
 			}
 			return list;
 		}
+	
+	public void updateImg1(ProdVO prodVO) {
+		Connection con = null;
+		PreparedStatement pstmt = null;	
+		
+		try {		
+			Class.forName(driver);
+			con = DriverManager.getConnection(url, userid, passwd);
+			pstmt = con.prepareStatement(UPDATE_IMG1);
+			
+			pstmt.setBytes(1, prodVO.getProd_pic1());
+			pstmt.setString(2, prodVO.getProd_no());
+			
+			pstmt.executeUpdate();
+			
+		} catch (SQLException e) {
+			throw new RuntimeException("A database error occured. "
+					+ e.getMessage());
+			
+		}
+		 catch (ClassNotFoundException e) {
+				e.printStackTrace();
+		}finally{
+			if (pstmt != null) {
+				try{
+					pstmt.close();
+				} catch (SQLException se){
+					se.printStackTrace(System.err);
+				}
+			}
+			if(con != null) {
+				try {
+					con.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+		}	
+	}
 
 	public static void main (String[] args) throws IOException{
-//		ProdJDBCDAO dao = new ProdJDBCDAO();		
+		ProdJDBCDAO dao = new ProdJDBCDAO();		
 //		insertTest(dao);
 //      updateTest(dao);
-      getQueryResultTest("衣索比亞", "水洗", "中焙", "%gg%");
+//      getQueryResultTest("衣索比亞", "水洗", "中焙", "%gg%");
 //		dao.delete("P1000000019");
 //		getImageTest(dao);
 //		getAllTest(dao);
-//		getAllToJSONTest(dao);
+//		getAllNoImgTest(dao);
+		//只新增照片方法，暫為測試用
+		for(int i = 1; i<6 ;i++){
+			String prod_no = "P100000000" + i;
+			updateImg1Test(dao,prod_no ,"C:\\Users\\Java\\Desktop\\專題用圖片\\product\\prod0"+i+".jpg" );
+		}
+		
 	}
 	
 	public static void insertTest(ProdJDBCDAO dao) throws IOException{
@@ -721,7 +769,7 @@ public class ProdJDBCDAO implements ProdDAO_interface {
 	}
 	
 	public static void getAllTest(ProdJDBCDAO dao){
-		List<ProdVO> list = dao.getAllNoImg();
+		List<ProdVO> list = dao.getAll();
 		for (ProdVO prodVO : list) {
 			System.out.print(prodVO.getProd_no() + ", ");
 			System.out.print(prodVO.getStore_no() + ", ");
@@ -755,8 +803,8 @@ public class ProdJDBCDAO implements ProdDAO_interface {
 		}
 	}
 	
-	public static void getAllNoImgest(ProdJDBCDAO dao){
-		List<ProdVO> list = dao.getAll();
+	public static void getAllNoImgTest(ProdJDBCDAO dao){
+		List<ProdVO> list = dao.getAllNoImg();
 		for (ProdVO prodVO : list) {
 			System.out.print(prodVO.getProd_no() + ", ");
 			System.out.print(prodVO.getStore_no() + ", ");
@@ -835,4 +883,13 @@ public class ProdJDBCDAO implements ProdDAO_interface {
 		}
 	}
 	
+	//只新增照片方法，暫為測試用
+	public static void updateImg1Test(ProdJDBCDAO dao, String ptod_no, String path) throws IOException{
+		ProdVO prodVO01 = new ProdVO();
+		prodVO01.setProd_no(ptod_no);	
+		prodVO01.setProd_pic1(getPictureByteArray(path));
+		
+		dao.updateImg1(prodVO01);
+		System.out.println("修改一筆商品照片");
+	}
 }

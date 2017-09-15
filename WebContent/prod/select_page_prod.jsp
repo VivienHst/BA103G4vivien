@@ -6,7 +6,7 @@
 		<title>Product Select</title>
 	</head>
 	<body>
-		<jsp:useBean id="prodSvc" scope="page" class="com.beanlife.prod.model.ProdService" />
+		<jsp:useBean id="prodSvc" scope="page" class="com.prod.model.ProdService" />
 		<table border ='1'>
 			<caption>Product MVC</caption>
 			
