@@ -15,10 +15,10 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.act.model.ActService;
 import com.act.model.ActVO;
+import com.beanlife.android.tool.ImageUtil;
 import com.google.gson.Gson;
 
 import com.google.gson.JsonObject;
-import com.prod.android.ImageUtil;
 
 /**
  * Servlet implementation class ActServletForApp

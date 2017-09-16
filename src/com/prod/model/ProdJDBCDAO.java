@@ -673,7 +673,8 @@ public class ProdJDBCDAO implements ProdDAO_interface {
 	}
 
 	public static void main (String[] args) throws IOException{
-		ProdJDBCDAO dao = new ProdJDBCDAO();		
+		ProdJDBCDAO dao = new ProdJDBCDAO();
+		getByPrimaryKeyTest(dao);
 //		insertTest(dao);
 //      updateTest(dao);
 //      getQueryResultTest("衣索比亞", "水洗", "中焙", "%gg%");
@@ -682,11 +683,11 @@ public class ProdJDBCDAO implements ProdDAO_interface {
 //		getAllTest(dao);
 //		getAllNoImgTest(dao);
 		//只新增照片方法，暫為測試用
-		for(int i = 0; i<10 ;i++){
-			String prod_no = "P100000001" + i;
-			int j=i+1;
-			updateImg1Test(dao,prod_no ,"C:\\Users\\Java\\Desktop\\專題用圖片\\product\\prod0" + j + ".jpg" );
-		}
+//		for(int i = 0; i<10 ;i++){
+//			String prod_no = "P100000001" + i;
+//			int j=i+1;
+//			updateImg1Test(dao,prod_no ,"C:\\Users\\Java\\Desktop\\專題用圖片\\product\\prod0" + j + ".jpg" );
+//		}
 		
 	}
 	
@@ -759,6 +760,38 @@ public class ProdJDBCDAO implements ProdDAO_interface {
 		dao.update(prodVO01);
 		System.out.println("修改一筆商品");
 	}
+	
+	public static void getByPrimaryKeyTest(ProdJDBCDAO dao){
+	ProdVO prodVO = dao.findByPrimaryKey("P1000000001");
+	System.out.print(prodVO.getProd_no() + ", ");
+	System.out.print(prodVO.getStore_no() + ", ");
+	System.out.print(prodVO.getProd_name() + ", ");
+	System.out.print(prodVO.getBean_type() + ", ");
+	System.out.print(prodVO.getBean_grade() + ", ");
+	System.out.print(prodVO.getBean_contry() + ", ");
+	System.out.print(prodVO.getBean_region() + ", ");
+	System.out.print(prodVO.getBean_farm() + ", ");
+	System.out.print(prodVO.getBean_farmer() + ", ");
+	System.out.print(prodVO.getBean_el() + ", ");
+	System.out.print(prodVO.getProc() + ", ");
+	System.out.print(prodVO.getRoast() + ", ");
+	System.out.print(prodVO.getBean_attr_acid() + ", ");
+	System.out.print(prodVO.getBean_attr_aroma() + ", ");
+	System.out.print(prodVO.getBean_attr_body() + ", ");
+	System.out.print(prodVO.getBean_attr_after() + ", ");
+	System.out.print(prodVO.getBean_attr_bal() + ", ");
+	System.out.print(prodVO.getBean_aroma() + ", ");
+	System.out.print(prodVO.getProd_price() + ", ");
+	System.out.print(prodVO.getProd_wt() + ", ");
+	System.out.print(prodVO.getSend_fee() + ", ");
+	System.out.print(prodVO.getProd_sup() + ", ");
+	System.out.print(prodVO.getProd_cont() + ", ");
+	System.out.print(prodVO.getProd_pic1() + ", ");
+	System.out.print(prodVO.getProd_pic2() + ", ");
+	System.out.print(prodVO.getProd_pic3() + ", ");
+	System.out.print(prodVO.getProd_stat() + ", ");
+	System.out.print(prodVO.getEd_time() + ", ");
+}
 	
 	public static void getImageByPKTest(ProdJDBCDAO dao) throws IOException{
 		List<byte[]> prodImgList;
