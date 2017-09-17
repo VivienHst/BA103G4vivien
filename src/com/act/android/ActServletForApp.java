@@ -58,7 +58,7 @@ public class ActServletForApp extends HttpServlet {
 		System.out.println("act action : " + action);
 		String outStr = "";
 		if(action.equals("getAll")){
-			System.out.println("Get all Img");
+			System.out.println("Get all No Img");
 			list = actSvc.getAllNoImg();
 			actList = new ArrayList<ActVO>();
 			for(ActVO list : list){

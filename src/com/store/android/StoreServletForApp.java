@@ -82,7 +82,7 @@ public class StoreServletForApp extends HttpServlet {
 		 	out.println(outStr);
 		} else if(action.equals("getImage")){
 			OutputStream os = response.getOutputStream();
-			String Store_no = jsonObject.get("Store_no").getAsString();
+			String Store_no = jsonObject.get("store_no").getAsString();
 			int imageSize = jsonObject.get("imageSize").getAsInt();
 			StoreImage = StoreSvc.getImageByPK(Store_no);
 			byte[] Store_pic1 = StoreImage.get(0);
@@ -96,7 +96,9 @@ public class StoreServletForApp extends HttpServlet {
 			os.close();			
 		} 
 		else if(action.equals("getOneStore")){
-			storeVO = StoreSvc.getOneStoreNoImg("Store_no");
+			String storeNo = jsonObject.get("Store_no").getAsString();
+			storeVO = StoreSvc.getOneStoreNoImg(storeNo);
+			System.out.println(storeVO.getStore_no());
 			outStr = gson.toJson(storeVO);
 			response.setContentType(CONTENT_TYPE);
 			PrintWriter out = response.getWriter();
