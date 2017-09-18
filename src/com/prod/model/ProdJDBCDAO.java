@@ -11,7 +11,7 @@ import java.sql.*;
 public class ProdJDBCDAO implements ProdDAO_interface {
 	
 	String driver = "oracle.jdbc.driver.OracleDriver";
-	String url = "jdbc:oracle:thin:@localhost:1521:XE";
+	String url = "jdbc:oracle:thin:@54.92.7.228:1521:XE";
 	String userid = "ba103g4";
 	String passwd = "123456";
 	private static final String INSERT_STMT = "INSERT INTO PROD VALUES ('P'||prod_NO_seq.NEXTVAL,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
@@ -674,7 +674,7 @@ public class ProdJDBCDAO implements ProdDAO_interface {
 
 	public static void main (String[] args) throws IOException{
 		ProdJDBCDAO dao = new ProdJDBCDAO();
-		getByPrimaryKeyTest(dao);
+//		getByPrimaryKeyTest(dao);
 //		insertTest(dao);
 //      updateTest(dao);
 //      getQueryResultTest("衣索比亞", "水洗", "中焙", "%gg%");
@@ -683,11 +683,11 @@ public class ProdJDBCDAO implements ProdDAO_interface {
 //		getAllTest(dao);
 //		getAllNoImgTest(dao);
 		//只新增照片方法，暫為測試用
-//		for(int i = 0; i<10 ;i++){
-//			String prod_no = "P100000001" + i;
+		for(int i = 1; i<10 ;i++){
+			String prod_no = "P100000000" + i;
 //			int j=i+1;
-//			updateImg1Test(dao,prod_no ,"C:\\Users\\Java\\Desktop\\專題用圖片\\product\\prod0" + j + ".jpg" );
-//		}
+			updateImg1Test(dao,prod_no ,"C:\\Users\\Java\\Desktop\\專題用圖片\\product\\prod0" + i + ".jpg" );
+		}
 		
 	}
 	
