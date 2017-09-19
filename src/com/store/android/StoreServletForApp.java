@@ -28,7 +28,7 @@ public class StoreServletForApp extends HttpServlet {
        
 	private final static String CONTENT_TYPE = "text/html; charset=UTF-8";
 	
-	private StoreService StoreSvc;
+	private StoreService storeSvc;
 	private List<StoreVO> list;
 	private StoreVO storeVO ;
 	private List<StoreVO> StoreList;
@@ -55,7 +55,7 @@ public class StoreServletForApp extends HttpServlet {
 			
 		request.setCharacterEncoding("UTF-8");
 		
-		StoreSvc = new StoreService();
+		storeSvc = new StoreService();
 		
 		Gson gson = new Gson();
 		BufferedReader br = request.getReader();
@@ -71,7 +71,7 @@ public class StoreServletForApp extends HttpServlet {
 		System.out.println("action : " + action );
 		String outStr = "";
 		if(action.equals("getAll")){
-			list = StoreSvc.getAllNoImg();
+			list = storeSvc.getAllNoImg();
 			StoreList = new ArrayList<StoreVO>();
 			for(StoreVO list : list){
 				StoreList.add(list);
@@ -84,7 +84,7 @@ public class StoreServletForApp extends HttpServlet {
 			OutputStream os = response.getOutputStream();
 			String Store_no = jsonObject.get("store_no").getAsString();
 			int imageSize = jsonObject.get("imageSize").getAsInt();
-			StoreImage = StoreSvc.getImageByPK(Store_no);
+			StoreImage = storeSvc.getImageByPK(Store_no);
 			byte[] Store_pic1 = StoreImage.get(0);
 			if(Store_pic1 != null){
 				Store_pic1 = ImageUtil.shrink(Store_pic1, imageSize);
@@ -97,7 +97,7 @@ public class StoreServletForApp extends HttpServlet {
 		} 
 		else if(action.equals("getOneStore")){
 			String storeNo = jsonObject.get("Store_no").getAsString();
-			storeVO = StoreSvc.getOneStoreNoImg(storeNo);
+			storeVO = storeSvc.getOneStoreNoImg(storeNo);
 			System.out.println(storeVO.getStore_no());
 			outStr = gson.toJson(storeVO);
 			response.setContentType(CONTENT_TYPE);

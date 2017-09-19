@@ -1,4 +1,4 @@
-package com.act.android;
+package com.review.android;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -13,36 +13,52 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.act.model.ActService;
-import com.act.model.ActVO;
 import com.beanlife.android.tool.ImageUtil;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
+import com.review.model.ReviewService;
+import com.review.model.ReviewVO;
+import com.review.model.ReviewService;
+import com.review.model.ReviewVO;
 
 /**
- * Servlet implementation class ActServletForApp
+ * Servlet implementation class ReviewServletForAndroid
  */
-
-@WebServlet("/ActServletForApp")
-public class ActServletForApp extends HttpServlet {
+@WebServlet("/ReviewServletForApp")
+public class ReviewServletForApp extends HttpServlet {
 	private static final long serialVersionUID = 1L;
+       
+	private final static String CONTENT_TYPE = "text/html; charset=UTF-8";
 	
-	private final static String CONTENT_TYPE = "text/html; charset=UTF-8"; 
-	
-	private ActService actSvc;
-	private List<ActVO> list;
-	private List<ActVO> actList;
-	private List<byte[]> actImage;
+	private ReviewService reviewSvc;
+	private List<ReviewVO> list;
+	private ReviewVO reviewVO ;
+	private List<ReviewVO> reviewList;
+	private List<byte[]> reviewImage;
+
+    
+    
+	@Override
+	public void init() throws ServletException {
+		super.init();	
+	}
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
+//		Gson gson = new Gson();
+//		String reviewList_gson = gson.toJson(reviewList);
+//		response.setContentType(CONTENT_TYPE);
+//		PrintWriter out = response.getWriter();
+//		out.println("<H3>review JSON</H3>");
+//		out.println(reviewList_gson);
+//		
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
+			
 		request.setCharacterEncoding("UTF-8");
-		actSvc = new ActService();
+		
+		reviewSvc = new ReviewService();
 		
 		Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd").create();
 		BufferedReader br = request.getReader();
@@ -55,41 +71,23 @@ public class ActServletForApp extends HttpServlet {
 		
 		JsonObject jsonObject = gson.fromJson(jsonIn.toString(), JsonObject.class);
 		String action = jsonObject.get("action").getAsString();
-		System.out.println("act action : " + action);
+		System.out.println("action : " + action );
 		String outStr = "";
-		if(action.equals("getAll")){
-			System.out.println("Get all No Img");
-			list = actSvc.getAllNoImg();
-			actList = new ArrayList<ActVO>();
-			for(ActVO list : list){
-				System.out.println(list.getAct_op_date());
-				
-				actList.add(list);
+		if(action.equals("getProdReview")){//getByProd(String prod_no)
+			String prod_no = jsonObject.get("prod_no").getAsString();
+			list = reviewSvc.getVOByProd(prod_no);
+			reviewList = new ArrayList<ReviewVO>();
+			for(ReviewVO list : list){
+				reviewList.add(list);
 			}
 			outStr = gson.toJson(list);
-			System.out.println(outStr);
 			response.setContentType(CONTENT_TYPE);
 			PrintWriter out = response.getWriter();
-			out.println(outStr);			
-		} else if(action.equals("getImage")){
-			OutputStream os = response.getOutputStream();
-			String act_no = jsonObject.get("act_no").getAsString();
-			int imageSize = jsonObject.get("imageSize").getAsInt();
-			actImage = actSvc.getImageByPK(act_no);
-			byte[] act_pic1 = actImage.get(0);
-			if(act_pic1 != null){
-				act_pic1 = ImageUtil.shrink(act_pic1, imageSize);
-				response.setContentType("image/jpeg");
-				response.setContentLength(act_pic1.length);
-			}
-			os.write(act_pic1);
-			os.flush();
-			os.close();
-		}
-		else{
+		 	out.println(outStr);
+		} else{
 			doGet(request, response);
 		}
-		
 	}
+
 
 }

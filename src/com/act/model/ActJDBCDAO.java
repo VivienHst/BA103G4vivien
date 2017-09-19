@@ -49,7 +49,7 @@ public class ActJDBCDAO implements ActDAO_interface{
 			+ "MIN_MEM,"
 			+ "MAX_MEM,"
 			+ "MEM_COUNT,"
-			+ "ACT_OP_DATE,"
+			+ "TO_CHAR(ACT_OP_DATE,'YYYY-MM-DD') ACT_OP_DATE,"
 			+ "ACT_ED_DATE,"
 			+ "DL_DATE,"
 			+ "FD_DATE,"
@@ -650,9 +650,9 @@ public class ActJDBCDAO implements ActDAO_interface{
 	public static void main(String[] args) throws IOException {
 		// TODO Auto-generated method stub
 		ActJDBCDAO dao=new ActJDBCDAO();
-		ActVO ActVO1=new ActVO();
+//		ActVO ActVO1=new ActVO();
 //		getImageByPKTest(dao); 
-//		getAllNoImgTest(dao); 
+		getAllNoImgTest(dao); 
 		
 //	ActVO1.setMem_ac("camacoffee");
 //	ActVO1.setOrg_cont("我是主辦人");

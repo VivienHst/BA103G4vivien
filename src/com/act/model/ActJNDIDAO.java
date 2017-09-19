@@ -58,7 +58,7 @@ public class ActJNDIDAO implements ActDAO_interface{
 			+ "MIN_MEM,"
 			+ "MAX_MEM,"
 			+ "MEM_COUNT,"
-			+ "ACT_OP_DATE,"
+			+ "TO_CHAR(ACT_OP_DATE,'YYYY-MM-DD') ACT_OP_DATE,"
 			+ "ACT_ED_DATE,"
 			+ "DL_DATE,"
 			+ "FD_DATE,"
