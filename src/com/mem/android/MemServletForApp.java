@@ -67,7 +67,7 @@ public class MemServletForApp extends HttpServlet {
 			response.setContentType(CONTENT_TYPE);
 			PrintWriter out=response.getWriter();
 			out.println(outStr);
-		}else if(action.equals("getMemImg")){
+		}else if(action.equals("getImage")){
 			OutputStream os = response.getOutputStream();
 			String mem_ac = jsonObject.get("mem_ac").getAsString();
 			int imageSize = jsonObject.get("imageSize").getAsInt();

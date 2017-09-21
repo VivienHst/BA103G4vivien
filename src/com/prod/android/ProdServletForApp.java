@@ -18,6 +18,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.prod.model.ProdService;
 import com.prod.model.ProdVO;
+import com.review.model.ReviewService;
 
 /**
  * Servlet implementation class ProdServletForApp
@@ -35,6 +36,8 @@ public class ProdServletForApp extends HttpServlet {
 //	private ProdVO prodVO ;
 	private List<ProdVO> prodList;
 	private List<byte[]> prodImage;
+	private ReviewService revSvc;
+	private Double prodScore;
     
     
 	@Override
@@ -113,6 +116,16 @@ public class ProdServletForApp extends HttpServlet {
 			outStr = gson.toJson(list);
 			response.setContentType(CONTENT_TYPE);
 			PrintWriter out = response.getWriter();
+			out.println(outStr);
+		}else if(action.equals("getScore")){
+			revSvc = new ReviewService();
+			String prod_no = jsonObject.get("prod_no").getAsString();
+			System.out.println(prod_no);
+			
+			prodScore = revSvc.getScoreByProd(prod_no) ;
+			outStr = gson.toJson(prodScore);
+			response.setContentType(CONTENT_TYPE);
+			PrintWriter out=response.getWriter();
 			out.println(outStr);
 		}
 		
