@@ -2,7 +2,6 @@
 package com.mem.model;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -22,7 +21,6 @@ public class MemDAO implements MemDAO_interface {
 			Context ctx = new InitialContext();
 			ds = (DataSource) ctx.lookup("java:comp/env/jdbc/BA103G4DB");
 		} catch (NamingException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -30,14 +28,61 @@ public class MemDAO implements MemDAO_interface {
 	private static final String INSERT_STMT = "INSERT INTO MEM VALUES "
 			+ "(?,'U'||mem_NO_seq.NEXTVAL,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 
-	private static final String UPDATE = "UPDATE MEM SET " + "MEM_PWD =?," + "MEM_LNAME =?," + "MEM_FNAME =?,"
-			+ "MEM_EMAIL =?," + "MEM_PHONE =?," + "MEM_ADD =?," + "MEM_PIC =?," + "MEM_SET =?," + "MEM_TOTAL_PT =?,"
-			+ "MEM_PT =?," + "GRADE_NO =?," + "MEM_STAT =?," + "MEM_STAT_CDATE =?," + "MEM_REG_DATE =? "
+	private static final String UPDATE = "UPDATE MEM SET " 
+			+ "MEM_PWD =?," 
+			+ "MEM_LNAME =?," 
+			+ "MEM_FNAME =?,"
+			+ "MEM_EMAIL =?," 
+			+ "MEM_PHONE =?," 
+			+ "MEM_ADD =?," 
+			+ "MEM_PIC =?," 
+			+ "MEM_SET =?," 
+			+ "MEM_TOTAL_PT =?,"
+			+ "MEM_PT =?," 
+			+ "GRADE_NO =?," 
+			+ "MEM_STAT =?," 
+			+ "MEM_STAT_CDATE =?," 
+			+ "MEM_REG_DATE =? "
 			+ "WHERE MEM_AC =?";
+	
 
 	private static final String DELETE = "DELETE FROM MEM WHERE MEM_AC = ?";
 	private static final String GET_ALL_STMT = "SELECT * FROM MEM";
 	private static final String GET_ONE_STMT = "SELECT * FROM MEM WHERE MEM_AC = ?";
+	
+	private static final String GET_ALL_NO_IMG_STMT = "SELECT MEM_AC,"
+			+ " MEM_PWD," 
+			+ " MEM_LNAME," 
+			+ " MEM_FNAME," 
+			+ " MEM_EMAIL," 
+			+ " MEM_PHONE," 
+			+ " MEM_ADD," 
+			+ " MEM_SET," 
+			+ " MEM_TOTAL_PT," 
+			+ " MEM_PT," 
+			+ " GRADE_NO," 
+			+ " MEM_STAT," 
+			+ " MEM_STAT_CDATE," 
+			+ " MEM_REG_DATE "
+			+ " FROM MEM";
+	
+	private static final String GET_ONE_NO_IMG_STMT = "SELECT MEM_PWD," 
+			+ " MEM_LNAME," 
+			+ " MEM_FNAME," 
+			+ " MEM_EMAIL," 
+			+ " MEM_PHONE," 
+			+ " MEM_ADD," 
+			+ " MEM_SET," 
+			+ " MEM_TOTAL_PT," 
+			+ " MEM_PT," 
+			+ " GRADE_NO," 
+			+ " MEM_STAT," 
+			+ " MEM_STAT_CDATE," 
+			+ " MEM_REG_DATE "
+			+ " FROM MEM "
+			+ " WHERE MEM_AC =? ";
+	
+	private static final String GET_IMG_BY_PK_STMT = "SELECT MEM_PIC FROM MEM WHERE MEM_AC = ?";
 
 	@Override
 	public void insert(MemVO memVO) {
@@ -299,6 +344,175 @@ public class MemDAO implements MemDAO_interface {
 			}
 		}
 		return list;
+	}
+	
+	@Override
+	public List<MemVO> getAllNoImg() {
+		List<MemVO> list = new ArrayList<MemVO>();
+		MemVO memVO = null;
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		
+	
+		try {
+			con = ds.getConnection();
+			pstmt = con.prepareStatement(GET_ALL_NO_IMG_STMT);
+			rs = pstmt.executeQuery();
+			
+			while (rs.next()){
+				memVO = new MemVO();
+				memVO.setMem_ac(rs.getString("mem_ac"));
+				memVO.setMem_pwd(rs.getString("mem_pwd"));
+				memVO.setMem_lname(rs.getString("mem_lname"));
+				memVO.setMem_fname(rs.getString("mem_fname"));
+				memVO.setMem_email(rs.getString("mem_email"));
+				memVO.setMem_phone(rs.getString("mem_phone"));
+				memVO.setMem_add(rs.getString("mem_add"));
+				memVO.setMem_set(rs.getString("mem_set"));
+				memVO.setMem_total_pt(rs.getInt("mem_total_pt"));
+				memVO.setMem_pt(rs.getInt("mem_pt"));
+				memVO.setGrade_no(rs.getInt("grade_no"));
+				memVO.setMem_stat(rs.getString("mem_stat"));
+				memVO.setMem_stat_cdate(rs.getDate("mem_stat_cdate"));
+				memVO.setMem_reg_date(rs.getDate("mem_reg_date"));	
+				list.add(memVO);
+			}
+			
+		} catch (SQLException se) {
+			throw new RuntimeException("A database error occured. "
+					+ se.getMessage());
+		} finally {
+			if (rs != null) {
+				try {
+					rs.close();
+				} catch (SQLException se) {
+					se.printStackTrace(System.err);
+				}
+			}
+			if (pstmt != null) {
+				try {
+					pstmt.close();
+				} catch (SQLException se) {
+					se.printStackTrace(System.err);
+				}
+			}
+			if (con != null) {
+				try {
+					con.close();
+				} catch (Exception e) {
+					e.printStackTrace(System.err);
+				}
+			}
+		}
+		return list;
+	}
+	
+	@Override
+	public MemVO findByPrimaryKeyNoImg(String mem_ac) {
+		MemVO memVO = null;
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		
+
+		try {
+			con = ds.getConnection();
+			pstmt = con.prepareStatement(GET_ONE_NO_IMG_STMT);
+			pstmt.setString(1, mem_ac);
+			rs = pstmt.executeQuery();
+			
+			while (rs.next()){
+
+				memVO = new MemVO();
+
+				memVO.setMem_ac(rs.getString("mem_ac"));
+				memVO.setMem_pwd(rs.getString("mem_pwd"));
+				memVO.setMem_lname(rs.getString("mem_lname"));
+				memVO.setMem_fname(rs.getString("mem_fname"));
+				memVO.setMem_email(rs.getString("mem_email"));
+				memVO.setMem_phone(rs.getString("mem_phone"));
+				memVO.setMem_add(rs.getString("mem_add"));
+				memVO.setMem_set(rs.getString("mem_set"));
+				memVO.setMem_total_pt(rs.getInt("mem_total_pt"));
+				memVO.setMem_pt(rs.getInt("mem_pt"));
+				memVO.setGrade_no(rs.getInt("grade_no"));
+				memVO.setMem_stat(rs.getString("mem_stat"));
+				memVO.setMem_stat_cdate(rs.getDate("mem_stat_cdate"));
+				memVO.setMem_reg_date(rs.getDate("mem_reg_date"));
+			}
+			
+		} catch (SQLException se) {
+			throw new RuntimeException("A database error occured. "
+					+ se.getMessage());
+		} finally {
+			if (rs != null) {
+				try {
+					rs.close();
+				} catch (SQLException se) {
+					se.printStackTrace(System.err);
+				}
+			}
+			if (pstmt != null) {
+				try {
+					pstmt.close();
+				} catch (SQLException se) {
+					se.printStackTrace(System.err);
+				}
+			}
+			if (con != null) {
+				try {
+					con.close();
+				} catch (Exception e) {
+					e.printStackTrace(System.err);
+				}
+			}
+		}
+		return memVO;
+	}
+	
+	@Override
+	public byte[] getImageByPK(String mem_ac) {
+		byte[] memImg = null;
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		
+		try {
+			con = ds.getConnection();
+			pstmt = con.prepareStatement(GET_IMG_BY_PK_STMT);
+			pstmt.setString(1, mem_ac);
+			rs = pstmt.executeQuery();
+			while(rs.next()){
+				memImg = rs.getBytes("mem_pic");
+			}			
+		} catch (SQLException se) {
+			throw new RuntimeException("A database error occured. "
+					+ se.getMessage());
+		} finally {
+			if (rs != null) {
+				try {
+					rs.close();
+				} catch (SQLException se) {
+					se.printStackTrace(System.err);
+				}
+			}
+			if (pstmt != null) {
+				try {
+					pstmt.close();
+				} catch (SQLException se) {
+					se.printStackTrace(System.err);
+				}
+			}
+			if (con != null) {
+				try {
+					con.close();
+				} catch (Exception e) {
+					e.printStackTrace(System.err);
+				}
+			}
+		}
+		return memImg;
 	}
 
 }

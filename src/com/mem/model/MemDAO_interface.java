@@ -9,4 +9,8 @@ public interface MemDAO_interface {
 	public void delete(String mem_ac);
 	public MemVO findByPrimaryKey(String mem_ac);
 	public List<MemVO> getAll();
+	
+	public List<MemVO> getAllNoImg();
+	public MemVO findByPrimaryKeyNoImg(String mem_ac);
+	public byte[] getImageByPK(String mem_ac);
 }

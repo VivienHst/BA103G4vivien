@@ -83,6 +83,17 @@ public class MemService {
 		return dao.getAll();
 	}
 	
+	public List<MemVO> getAllNoImg() {
+		return dao.getAllNoImg();
+	}
+
+	public MemVO findByPrimaryKeyNoImg(String mem_ac){
+		return dao.findByPrimaryKeyNoImg(mem_ac);
+	}
+	
+	public byte[] getImageByPK(String mem_ac){
+		return dao.getImageByPK(mem_ac);
+	}
 	
 
 }

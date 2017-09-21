@@ -45,6 +45,41 @@ public class MemJDBCDAO implements MemDAO_interface{
 	private static final String GET_ALL_STMT = "SELECT * FROM MEM";
 	private static final String GET_ONE_STMT = "SELECT * FROM MEM WHERE MEM_AC = ?";
 	
+	private static final String GET_ALL_NO_IMG_STMT = "SELECT MEM_AC,"
+			+ " MEM_PWD," 
+			+ " MEM_LNAME," 
+			+ " MEM_FNAME," 
+			+ " MEM_EMAIL," 
+			+ " MEM_PHONE," 
+			+ " MEM_ADD," 
+			+ " MEM_SET," 
+			+ " MEM_TOTAL_PT," 
+			+ " MEM_PT," 
+			+ " GRADE_NO," 
+			+ " MEM_STAT," 
+			+ " MEM_STAT_CDATE," 
+			+ " MEM_REG_DATE "
+			+ " FROM MEM";
+	
+	private static final String GET_ONE_NO_IMG_STMT = "SELECT MEM_PWD," 
+			+ " MEM_LNAME," 
+			+ " MEM_FNAME," 
+			+ " MEM_EMAIL," 
+			+ " MEM_PHONE," 
+			+ " MEM_ADD," 
+			+ " MEM_SET," 
+			+ " MEM_TOTAL_PT," 
+			+ " MEM_PT," 
+			+ " GRADE_NO," 
+			+ " MEM_STAT," 
+			+ " MEM_STAT_CDATE," 
+			+ " MEM_REG_DATE "
+			+ " FROM MEM "
+			+ " WHERE MEM_AC =? ";
+
+	
+	private static final String GET_IMG_BY_PK_STMT = "SELECT MEM_PIC FROM MEM WHERE MEM_AC = ?";
+	
 	
 	@Override
 	public void insert(MemVO memVO) {
@@ -340,6 +375,190 @@ public class MemJDBCDAO implements MemDAO_interface{
 		return list;
 	}
 	
+	@Override
+	public List<MemVO> getAllNoImg() {
+		List<MemVO> list = new ArrayList<MemVO>();
+		MemVO memVO = null;
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		
+	
+		try {
+			Class.forName(driver);
+			con = DriverManager.getConnection(url, userid, passwd);
+			pstmt = con.prepareStatement(GET_ALL_NO_IMG_STMT);
+			rs = pstmt.executeQuery();
+			
+			while (rs.next()){
+				memVO = new MemVO();
+				memVO.setMem_ac(rs.getString("mem_ac"));
+				memVO.setMem_pwd(rs.getString("mem_pwd"));
+				memVO.setMem_lname(rs.getString("mem_lname"));
+				memVO.setMem_fname(rs.getString("mem_fname"));
+				memVO.setMem_email(rs.getString("mem_email"));
+				memVO.setMem_phone(rs.getString("mem_phone"));
+				memVO.setMem_add(rs.getString("mem_add"));
+				memVO.setMem_set(rs.getString("mem_set"));
+				memVO.setMem_total_pt(rs.getInt("mem_total_pt"));
+				memVO.setMem_pt(rs.getInt("mem_pt"));
+				memVO.setGrade_no(rs.getInt("grade_no"));
+				memVO.setMem_stat(rs.getString("mem_stat"));
+				memVO.setMem_stat_cdate(rs.getDate("mem_stat_cdate"));
+				memVO.setMem_reg_date(rs.getDate("mem_reg_date"));	
+				list.add(memVO);
+			}
+			
+		}  catch (ClassNotFoundException e) {
+			throw new RuntimeException("Couldn't load database driver. "
+					+ e.getMessage());
+		} catch (SQLException se) {
+			throw new RuntimeException("A database error occured. "
+					+ se.getMessage());
+		} finally {
+			if (rs != null) {
+				try {
+					rs.close();
+				} catch (SQLException se) {
+					se.printStackTrace(System.err);
+				}
+			}
+			if (pstmt != null) {
+				try {
+					pstmt.close();
+				} catch (SQLException se) {
+					se.printStackTrace(System.err);
+				}
+			}
+			if (con != null) {
+				try {
+					con.close();
+				} catch (Exception e) {
+					e.printStackTrace(System.err);
+				}
+			}
+		}
+		return list;
+	}
+
+
+	@Override
+	public MemVO findByPrimaryKeyNoImg(String mem_ac) {
+		MemVO memVO = null;
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		
+
+		try {
+			Class.forName(driver);
+			con = DriverManager.getConnection(url, userid, passwd);
+			pstmt = con.prepareStatement(GET_ONE_NO_IMG_STMT);
+			pstmt.setString(1, mem_ac);
+			rs = pstmt.executeQuery();
+			
+			while (rs.next()){
+
+				memVO = new MemVO();
+
+				memVO.setMem_ac(rs.getString("mem_ac"));
+				memVO.setMem_pwd(rs.getString("mem_pwd"));
+				memVO.setMem_lname(rs.getString("mem_lname"));
+				memVO.setMem_fname(rs.getString("mem_fname"));
+				memVO.setMem_email(rs.getString("mem_email"));
+				memVO.setMem_phone(rs.getString("mem_phone"));
+				memVO.setMem_add(rs.getString("mem_add"));
+				memVO.setMem_set(rs.getString("mem_set"));
+				memVO.setMem_total_pt(rs.getInt("mem_total_pt"));
+				memVO.setMem_pt(rs.getInt("mem_pt"));
+				memVO.setGrade_no(rs.getInt("grade_no"));
+				memVO.setMem_stat(rs.getString("mem_stat"));
+				memVO.setMem_stat_cdate(rs.getDate("mem_stat_cdate"));
+				memVO.setMem_reg_date(rs.getDate("mem_reg_date"));
+			}
+			
+		} catch (ClassNotFoundException e) {
+			throw new RuntimeException("Couldn't load database driver. "
+					+ e.getMessage());
+		} catch (SQLException se) {
+			throw new RuntimeException("A database error occured. "
+					+ se.getMessage());
+		} finally {
+			if (rs != null) {
+				try {
+					rs.close();
+				} catch (SQLException se) {
+					se.printStackTrace(System.err);
+				}
+			}
+			if (pstmt != null) {
+				try {
+					pstmt.close();
+				} catch (SQLException se) {
+					se.printStackTrace(System.err);
+				}
+			}
+			if (con != null) {
+				try {
+					con.close();
+				} catch (Exception e) {
+					e.printStackTrace(System.err);
+				}
+			}
+		}
+		return memVO;
+	}
+
+
+	@Override
+	public byte[] getImageByPK(String mem_ac) {
+		byte[] memImg = null;
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		
+		try {
+			Class.forName(driver);
+			con = DriverManager.getConnection(url, userid, passwd);
+			pstmt = con.prepareStatement(GET_IMG_BY_PK_STMT);
+			pstmt.setString(1, mem_ac);
+			rs = pstmt.executeQuery();
+			while(rs.next()){
+				memImg = rs.getBytes("mem_pic");
+			}			
+		} catch (ClassNotFoundException e) {
+			throw new RuntimeException("Couldn't load database driver. "
+					+ e.getMessage());
+		} catch (SQLException se) {
+			throw new RuntimeException("A database error occured. "
+					+ se.getMessage());
+		} finally {
+			if (rs != null) {
+				try {
+					rs.close();
+				} catch (SQLException se) {
+					se.printStackTrace(System.err);
+				}
+			}
+			if (pstmt != null) {
+				try {
+					pstmt.close();
+				} catch (SQLException se) {
+					se.printStackTrace(System.err);
+				}
+			}
+			if (con != null) {
+				try {
+					con.close();
+				} catch (Exception e) {
+					e.printStackTrace(System.err);
+				}
+			}
+		}
+		return memImg;
+	}
+
+
 	public static void main (String[] args) throws IOException{
 		MemJDBCDAO dao = new MemJDBCDAO();
 
@@ -347,7 +566,10 @@ public class MemJDBCDAO implements MemDAO_interface{
 //      updateTest(dao);
 //		getByPrimaryKeyTest(dao);
 //		dao.delete("testtest11");
-		getAllTest(dao);
+//		getAllTest(dao);
+//		getAllNoImgTest(dao);
+//		getByPrimaryKeyNoImgTest(dao);
+		getImgByPKTest(dao);
 
 	}
 	
@@ -455,6 +677,53 @@ public class MemJDBCDAO implements MemDAO_interface{
 		fis.close();
 
 		return baos.toByteArray();
+	}
+
+
+	public static void getAllNoImgTest(MemJDBCDAO dao){
+		
+		List<MemVO> list = dao.getAll();
+		for (MemVO memVO : list) {
+			System.out.print(memVO.getMem_ac() + ", ");
+			System.out.print(memVO.getMem_pwd() + ", ");
+			System.out.print(memVO.getMem_lname() + ", ");
+			System.out.print(memVO.getMem_fname() + ", ");
+			System.out.print(memVO.getMem_email() + ", ");
+			System.out.print(memVO.getMem_phone() + ", ");
+			System.out.print(memVO.getMem_add() + ", ");
+			System.out.print(memVO.getMem_set() + ", ");
+			System.out.print(memVO.getMem_total_pt() + ", ");
+			System.out.print(memVO.getMem_pt() + ", ");
+			System.out.print(memVO.getGrade_no() + ", ");
+			System.out.print(memVO.getMem_stat() + ", ");
+			System.out.print(memVO.getMem_stat_cdate() + ", ");
+			System.out.println(memVO.getMem_reg_date() + ", ");
+			System.out.println("======================================================");
+		}
+	}
+	
+	public static void getByPrimaryKeyNoImgTest(MemJDBCDAO dao){
+		MemVO memVO = dao.findByPrimaryKey("mrbrown");
+		System.out.println(memVO.getMem_ac() + ", ");
+		System.out.println(memVO.getMem_pwd() + ", ");
+		System.out.println(memVO.getMem_lname() + ", ");
+		System.out.println(memVO.getMem_fname() + ", ");
+		System.out.println(memVO.getMem_email() + ", ");
+		System.out.println(memVO.getMem_phone() + ", ");
+		System.out.println(memVO.getMem_add() + ", ");
+		System.out.println(memVO.getMem_set() + ", ");
+		System.out.println(memVO.getMem_total_pt() + ", ");
+		System.out.println(memVO.getMem_pt() + ", ");
+		System.out.println(memVO.getGrade_no() + ", ");
+		System.out.println(memVO.getMem_stat() + ", ");
+		System.out.println(memVO.getMem_stat_cdate() + ", ");
+		System.out.println(memVO.getMem_reg_date() + ", ");
+	}
+
+
+	public static void getImgByPKTest(MemJDBCDAO dao) throws IOException{
+		byte[] mem_pic = dao.getImageByPK("mrbrown");
+		System.out.println(mem_pic);
 	}
 	
 

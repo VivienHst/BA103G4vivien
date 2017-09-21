@@ -11,4 +11,5 @@ public interface ProdDAO_interface {
 	public List<ProdVO> getAllNoImg();
 	public List<byte[]> getImageByPK(String prod_no);
 	public List <ProdVO> getQueryResult(String bean_contry, String proc, String roast, String prod_name);
+	public ProdVO findByPrimaryKeyNoImg(String prod_no);
 }

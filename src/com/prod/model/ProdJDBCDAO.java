@@ -78,6 +78,34 @@ public class ProdJDBCDAO implements ProdDAO_interface {
 			+ "ED_TIME "
 			+ "FROM PROD";
 	
+	private static final String GET_ONE_NO_IMG_STMT = "SELECT "
+			+ "STORE_NO," 
+			+ "PROD_NAME," 
+			+ "BEAN_TYPE," 
+			+ "BEAN_GRADE," 
+			+ "BEAN_CONTRY," 
+			+ "BEAN_REGION," 
+			+ "BEAN_FARM," 
+			+ "BEAN_FARMER," 
+			+ "BEAN_EL," 
+			+ "PROC," 
+			+ "ROAST," 
+			+ "BEAN_ATTR_ACID," 
+			+ "BEAN_ATTR_AROMA," 
+			+ "BEAN_ATTR_BODY," 
+			+ "BEAN_ATTR_AFTER," 
+			+ "BEAN_ATTR_BAL," 
+			+ "BEAN_AROMA," 
+			+ "PROD_PRICE," 
+			+ "PROD_WT," 
+			+ "SEND_FEE," 
+			+ "PROD_SUP," 
+			+ "PROD_CONT,"
+			+ "PROD_STAT," 
+			+ "ED_TIME "
+			+ "FROM PROD "
+			+ "WHERE PROD_NO =?";
+	
 	private static final String GET_IMG_BY_PK_STMT = "SELECT PROD_PIC1,PROD_PIC2,PROD_PIC3 FROM PROD WHERE PROD_NO = ?"; 
 	private static final String GET_QUERY_RESULT = "SELECT * FROM PROD WHERE BEAN_CONTRY LIKE ? AND PROC LIKE ? AND ROAST LIKE ? AND PROD_NAME LIKE ?";
 	
@@ -112,7 +140,7 @@ public class ProdJDBCDAO implements ProdDAO_interface {
 			pstmt.setInt(16, prodVO.getBean_attr_bal());
 			pstmt.setString(17, prodVO.getBean_aroma());
 			pstmt.setInt(18, prodVO.getProd_price());
-			pstmt.setInt(19, prodVO.getProd_wt());
+			pstmt.setDouble(19, prodVO.getProd_wt());
 			pstmt.setInt(20, prodVO.getSend_fee());
 			pstmt.setInt(21, prodVO.getProd_sup());
 			pstmt.setString(22, prodVO.getProd_cont());
@@ -175,7 +203,7 @@ public class ProdJDBCDAO implements ProdDAO_interface {
 			pstmt.setInt(16, prodVO.getBean_attr_bal());
 			pstmt.setString(17, prodVO.getBean_aroma());
 			pstmt.setInt(18, prodVO.getProd_price());
-			pstmt.setInt(19, prodVO.getProd_wt());
+			pstmt.setDouble(19, prodVO.getProd_wt());
 			pstmt.setInt(20, prodVO.getSend_fee());
 			pstmt.setInt(21, prodVO.getProd_sup());
 			pstmt.setString(22, prodVO.getProd_cont());
@@ -298,7 +326,7 @@ public class ProdJDBCDAO implements ProdDAO_interface {
 				prodVO.setBean_attr_bal(rs.getInt("bean_attr_bal"));
 				prodVO.setBean_aroma(rs.getString("Bean_aroma"));
 				prodVO.setProd_price(rs.getInt("prod_price"));
-				prodVO.setProd_wt(rs.getInt("prod_wt"));
+				prodVO.setProd_wt(rs.getDouble("prod_wt"));
 				prodVO.setSend_fee(rs.getInt("send_fee"));
 				prodVO.setProd_sup(rs.getInt("prod_sup"));
 				prodVO.setProd_cont(rs.getString("prod_cont"));
@@ -377,7 +405,7 @@ public class ProdJDBCDAO implements ProdDAO_interface {
 				prodVO.setBean_attr_bal(rs.getInt("bean_attr_bal"));
 				prodVO.setBean_aroma(rs.getString("Bean_aroma"));
 				prodVO.setProd_price(rs.getInt("prod_price"));
-				prodVO.setProd_wt(rs.getInt("prod_wt"));
+				prodVO.setProd_wt(rs.getDouble("prod_wt"));
 				prodVO.setSend_fee(rs.getInt("send_fee"));
 				prodVO.setProd_sup(rs.getInt("prod_sup"));
 				prodVO.setProd_cont(rs.getString("prod_cont"));
@@ -456,7 +484,7 @@ public class ProdJDBCDAO implements ProdDAO_interface {
 				prodVO.setBean_attr_bal(rs.getInt("bean_attr_bal"));
 				prodVO.setBean_aroma(rs.getString("Bean_aroma"));
 				prodVO.setProd_price(rs.getInt("prod_price"));
-				prodVO.setProd_wt(rs.getInt("prod_wt"));
+				prodVO.setProd_wt(rs.getDouble("prod_wt"));
 				prodVO.setSend_fee(rs.getInt("send_fee"));
 				prodVO.setProd_sup(rs.getInt("prod_sup"));
 				prodVO.setProd_cont(rs.getString("prod_cont"));
@@ -590,7 +618,7 @@ public class ProdJDBCDAO implements ProdDAO_interface {
 					prodVO.setBean_attr_bal(rs.getInt("bean_attr_bal"));
 					prodVO.setBean_aroma(rs.getString("Bean_aroma"));
 					prodVO.setProd_price(rs.getInt("prod_price"));
-					prodVO.setProd_wt(rs.getInt("prod_wt"));
+					prodVO.setProd_wt(rs.getDouble("prod_wt"));
 					prodVO.setSend_fee(rs.getInt("send_fee"));
 					prodVO.setProd_sup(rs.getInt("prod_sup"));
 					prodVO.setProd_cont(rs.getString("prod_cont"));
@@ -673,20 +701,96 @@ public class ProdJDBCDAO implements ProdDAO_interface {
 		}	
 	}
 
+	@Override
+	public ProdVO findByPrimaryKeyNoImg(String prod_no) {
+		ProdVO prodVO = null;
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		
+		try {
+			Class.forName(driver);
+			con = DriverManager.getConnection(url, userid, passwd);
+			pstmt = con.prepareStatement(GET_ONE_NO_IMG_STMT);
+			pstmt.setString(1, prod_no);
+			rs = pstmt.executeQuery();
+			
+			while (rs.next()){
+				prodVO = new ProdVO();
+				prodVO.setStore_no(rs.getString("store_no"));
+				prodVO.setProd_no(rs.getString("prod_no"));
+				prodVO.setProd_name(rs.getString("prod_name"));
+				prodVO.setBean_type(rs.getString("bean_type"));
+				prodVO.setBean_grade(rs.getString("bean_grade"));
+				prodVO.setBean_contry(rs.getString("bean_contry"));
+				prodVO.setBean_region(rs.getString("bean_region"));
+				prodVO.setBean_farm(rs.getString("bean_farm"));
+				prodVO.setBean_farmer(rs.getString("bean_farmer"));
+				prodVO.setBean_el(rs.getInt("bean_el"));
+				prodVO.setProc(rs.getString("proc"));
+				prodVO.setRoast(rs.getString("roast"));
+				prodVO.setBean_attr_acid(rs.getInt("bean_attr_acid"));
+				prodVO.setBean_attr_aroma(rs.getInt("bean_attr_aroma"));
+				prodVO.setBean_attr_body(rs.getInt("bean_attr_body"));
+				prodVO.setBean_attr_after(rs.getInt("bean_attr_after"));
+				prodVO.setBean_attr_bal(rs.getInt("bean_attr_bal"));
+				prodVO.setBean_aroma(rs.getString("Bean_aroma"));
+				prodVO.setProd_price(rs.getInt("prod_price"));
+				prodVO.setProd_wt(rs.getDouble("prod_wt"));
+				prodVO.setSend_fee(rs.getInt("send_fee"));
+				prodVO.setProd_sup(rs.getInt("prod_sup"));
+				prodVO.setProd_cont(rs.getString("prod_cont"));
+				prodVO.setProd_stat(rs.getString("prod_stat"));
+				prodVO.setEd_time(rs.getDate("ed_time"));
+			}
+			
+		} catch (ClassNotFoundException e) {
+			throw new RuntimeException("Couldn't load database driver. "
+					+ e.getMessage());
+		} catch (SQLException se) {
+			throw new RuntimeException("A database error occured. "
+					+ se.getMessage());
+		} finally {
+			if (rs != null) {
+				try {
+					rs.close();
+				} catch (SQLException se) {
+					se.printStackTrace(System.err);
+				}
+			}
+			if (pstmt != null) {
+				try {
+					pstmt.close();
+				} catch (SQLException se) {
+					se.printStackTrace(System.err);
+				}
+			}
+			if (con != null) {
+				try {
+					con.close();
+				} catch (Exception e) {
+					e.printStackTrace(System.err);
+				}
+			}
+		}
+		return prodVO;
+	}
+
 	public static void main (String[] args) throws IOException{
 		ProdJDBCDAO dao = new ProdJDBCDAO();		
 //		insertTest(dao);
-//      updateTest(dao);
-//      getQueryResultTest("衣索比亞", "水洗", "中焙", "%gg%");
+//		updateTest(dao);
+//		getQueryResultTest("衣索比亞", "水洗", "中焙", "%gg%");
 //		dao.delete("P1000000019");
 //		getImageTest(dao);
 //		getAllTest(dao);
 //		getAllNoImgTest(dao);
+		getOneNoImgTest(dao);
 		//只新增照片方法，暫為測試用
-		for(int i = 1; i<10 ;i++){
-			String prod_no = "P100000000" + i;
-			updateImg1Test(dao,prod_no ,"D:\\apache-tomcat-7.0.75\\webapps\\BeanLife_front\\res\\img\\p"+((i % 3)+1)+".jpg" );
-		}
+//		for(int i = 1; i<10 ;i++){
+//			String prod_no = "P100000000" + i;
+//			updateImg1Test(dao,prod_no ,"D:\\apache-tomcat-7.0.75\\webapps\\BeanLife_front\\res\\img\\p"+((i % 3)+1)+".jpg" );
+//		}
 		
 	}
 	
@@ -711,13 +815,13 @@ public class ProdJDBCDAO implements ProdDAO_interface {
 		prodVO01.setBean_attr_bal(3);
 		prodVO01.setBean_aroma("咖啡花檸檬甜香");
 		prodVO01.setProd_price(250);
-		prodVO01.setProd_wt(1);
+		prodVO01.setProd_wt(1.1);
 		prodVO01.setSend_fee(80);
 		prodVO01.setProd_sup(170);
 		prodVO01.setProd_cont("沿襲傳統工法於正午時分覆蓋棚架約三小時，以免過強的日曬加速乾燥時程而影響品質。");
-		prodVO01.setProd_pic1(getPictureByteArray("C:\\Users\\Java\\Desktop\\專題用圖片\\product\\prod01.jpg"));
-		prodVO01.setProd_pic2(getPictureByteArray("C:\\Users\\Java\\Desktop\\專題用圖片\\product\\prod02.jpg"));
-		prodVO01.setProd_pic3(getPictureByteArray("C:\\Users\\Java\\Desktop\\專題用圖片\\product\\prod03.jpg"));
+		prodVO01.setProd_pic1(new byte[1]);
+		prodVO01.setProd_pic2(new byte[1]);
+		prodVO01.setProd_pic3(new byte[1]);
 		prodVO01.setProd_stat("上架");
 		prodVO01.setEd_time(java.sql.Date.valueOf("2002-01-01"));
 		
@@ -746,13 +850,13 @@ public class ProdJDBCDAO implements ProdDAO_interface {
 		prodVO01.setBean_attr_bal(3);
 		prodVO01.setBean_aroma("咖啡花檸檬甜香");
 		prodVO01.setProd_price(250);
-		prodVO01.setProd_wt(1);
+		prodVO01.setProd_wt(0.5);
 		prodVO01.setSend_fee(80);
 		prodVO01.setProd_sup(170);
 		prodVO01.setProd_cont("沿襲傳統工法於正午時分覆蓋棚架約三小時，以免過強的日曬加速乾燥時程而影響品質。");
-		prodVO01.setProd_pic1(getPictureByteArray("C:\\Users\\Java\\Desktop\\專題用圖片\\product\\prod01.jpg"));
-		prodVO01.setProd_pic2(getPictureByteArray("C:\\Users\\Java\\Desktop\\專題用圖片\\product\\prod02.jpg"));
-		prodVO01.setProd_pic3(getPictureByteArray("C:\\Users\\Java\\Desktop\\專題用圖片\\product\\prod03.jpg"));
+		prodVO01.setProd_pic1(new byte[1]);
+		prodVO01.setProd_pic2(new byte[1]);
+		prodVO01.setProd_pic3(new byte[1]);
 		prodVO01.setProd_stat("上架");
 		prodVO01.setEd_time(java.sql.Date.valueOf("2002-01-01"));
 		
@@ -892,5 +996,37 @@ public class ProdJDBCDAO implements ProdDAO_interface {
 		
 		dao.updateImg1(prodVO01);
 		System.out.println("修改一筆商品照片");
+	}
+
+	public static void getOneNoImgTest(ProdJDBCDAO dao){
+		ProdVO prodVO = dao.findByPrimaryKey("P1000000001");
+
+			System.out.print(prodVO.getProd_no() + ", ");
+			System.out.print(prodVO.getStore_no() + ", ");
+			System.out.print(prodVO.getProd_name() + ", ");
+			System.out.print(prodVO.getBean_type() + ", ");
+			System.out.print(prodVO.getBean_grade() + ", ");
+			System.out.print(prodVO.getBean_contry() + ", ");
+			System.out.print(prodVO.getBean_region() + ", ");
+			System.out.print(prodVO.getBean_farm() + ", ");
+			System.out.print(prodVO.getBean_farmer() + ", ");
+			System.out.print(prodVO.getBean_el() + ", ");
+			System.out.print(prodVO.getProc() + ", ");
+			System.out.print(prodVO.getRoast() + ", ");
+			System.out.print(prodVO.getBean_attr_acid() + ", ");
+			System.out.print(prodVO.getBean_attr_aroma() + ", ");
+			System.out.print(prodVO.getBean_attr_body() + ", ");
+			System.out.print(prodVO.getBean_attr_after() + ", ");
+			System.out.print(prodVO.getBean_attr_bal() + ", ");
+			System.out.print(prodVO.getBean_aroma() + ", ");
+			System.out.print(prodVO.getProd_price() + ", ");
+			System.out.print(prodVO.getProd_wt() + ", ");
+			System.out.print(prodVO.getSend_fee() + ", ");
+			System.out.print(prodVO.getProd_sup() + ", ");
+			System.out.print(prodVO.getProd_cont() + ", ");
+			System.out.print(prodVO.getProd_stat() + ", ");
+			System.out.print(prodVO.getEd_time() + ", ");
+			System.out.println();
+		
 	}
 }
