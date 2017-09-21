@@ -426,7 +426,7 @@ public class MemJNDIDAO implements MemDAO_interface {
 
 				memVO = new MemVO();
 
-				memVO.setMem_ac(rs.getString("mem_ac"));
+				//memVO.setMem_ac(rs.getString("mem_ac"));
 				memVO.setMem_pwd(rs.getString("mem_pwd"));
 				memVO.setMem_lname(rs.getString("mem_lname"));
 				memVO.setMem_fname(rs.getString("mem_fname"));

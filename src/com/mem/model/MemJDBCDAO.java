@@ -461,7 +461,7 @@ public class MemJDBCDAO implements MemDAO_interface{
 
 				memVO = new MemVO();
 
-				memVO.setMem_ac(rs.getString("mem_ac"));
+				//memVO.setMem_ac(rs.getString("mem_ac"));
 				memVO.setMem_pwd(rs.getString("mem_pwd"));
 				memVO.setMem_lname(rs.getString("mem_lname"));
 				memVO.setMem_fname(rs.getString("mem_fname"));
@@ -568,8 +568,8 @@ public class MemJDBCDAO implements MemDAO_interface{
 //		dao.delete("testtest11");
 //		getAllTest(dao);
 //		getAllNoImgTest(dao);
-//		getByPrimaryKeyNoImgTest(dao);
-		getImgByPKTest(dao);
+		getByPrimaryKeyNoImgTest(dao);
+//		getImgByPKTest(dao);
 
 	}
 	
@@ -703,7 +703,7 @@ public class MemJDBCDAO implements MemDAO_interface{
 	}
 	
 	public static void getByPrimaryKeyNoImgTest(MemJDBCDAO dao){
-		MemVO memVO = dao.findByPrimaryKey("mrbrown");
+		MemVO memVO = dao.findByPrimaryKeyNoImg("mrbrown");
 		System.out.println(memVO.getMem_ac() + ", ");
 		System.out.println(memVO.getMem_pwd() + ", ");
 		System.out.println(memVO.getMem_lname() + ", ");

@@ -88,6 +88,8 @@ public class ProdServletForApp extends HttpServlet {
 			prodImage = prodSvc.getImageByPK(prod_no);
 			byte[] prod_pic1 = prodImage.get(0);
 			if(prod_pic1 != null){
+				
+				//把壓縮圖片寫在DAO測試速度
 				prod_pic1 = ImageUtil.shrink(prod_pic1, imageSize);
 				response.setContentType("image/jpeg");
 				response.setContentLength(prod_pic1.length);
