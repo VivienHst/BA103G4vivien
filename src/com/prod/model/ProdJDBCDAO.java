@@ -11,7 +11,7 @@ import java.sql.*;
 public class ProdJDBCDAO implements ProdDAO_interface {
 	
 	String driver = "oracle.jdbc.driver.OracleDriver";
-	String url = "jdbc:oracle:thin:@54.92.7.228:1521:XE";
+	String url = "jdbc:oracle:thin:@localhost:1521:XE";
 	String userid = "ba103g4";
 	String passwd = "123456";
 	private static final String INSERT_STMT = "INSERT INTO PROD VALUES ('P'||prod_NO_seq.NEXTVAL,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
@@ -279,8 +279,8 @@ public class ProdJDBCDAO implements ProdDAO_interface {
 			
 			while (rs.next()){
 				prodVO = new ProdVO();
-				prodVO.setProd_no(rs.getString("prod_no"));
 				prodVO.setStore_no(rs.getString("store_no"));
+				prodVO.setProd_no(rs.getString("prod_no"));
 				prodVO.setProd_name(rs.getString("prod_name"));
 				prodVO.setBean_type(rs.getString("bean_type"));
 				prodVO.setBean_grade(rs.getString("bean_grade"));
@@ -674,21 +674,19 @@ public class ProdJDBCDAO implements ProdDAO_interface {
 	}
 
 	public static void main (String[] args) throws IOException{
-		ProdJDBCDAO dao = new ProdJDBCDAO();
-		getByPrimaryKeyTest(dao);
+		ProdJDBCDAO dao = new ProdJDBCDAO();		
 //		insertTest(dao);
 //      updateTest(dao);
 //      getQueryResultTest("衣索比亞", "水洗", "中焙", "%gg%");
 //		dao.delete("P1000000019");
-//		getImageByPKTest(dao);
+//		getImageTest(dao);
 //		getAllTest(dao);
 //		getAllNoImgTest(dao);
 		//只新增照片方法，暫為測試用
-//		for(int i = 1; i<10 ;i++){
-//			String prod_no = "P100000000" + i;
-//			int j=i+1;
-//			updateImg1Test(dao,prod_no ,"C:\\Users\\Java\\Desktop\\專題用圖片\\product\\prod0" + i + ".jpg" );
-//		}
+		for(int i = 1; i<10 ;i++){
+			String prod_no = "P100000000" + i;
+			updateImg1Test(dao,prod_no ,"D:\\apache-tomcat-7.0.75\\webapps\\BeanLife_front\\res\\img\\p"+((i % 3)+1)+".jpg" );
+		}
 		
 	}
 	
@@ -760,38 +758,6 @@ public class ProdJDBCDAO implements ProdDAO_interface {
 		
 		dao.update(prodVO01);
 		System.out.println("修改一筆商品");
-	}
-	
-	public static void getByPrimaryKeyTest(ProdJDBCDAO dao){
-		ProdVO prodVO = dao.findByPrimaryKey("P1000000001");
-		System.out.print(prodVO.getProd_no() + ", ");
-		System.out.print(prodVO.getStore_no() + ", ");
-		System.out.print(prodVO.getProd_name() + ", ");
-		System.out.print(prodVO.getBean_type() + ", ");
-		System.out.print(prodVO.getBean_grade() + ", ");
-		System.out.print(prodVO.getBean_contry() + ", ");
-		System.out.print(prodVO.getBean_region() + ", ");
-		System.out.print(prodVO.getBean_farm() + ", ");
-		System.out.print(prodVO.getBean_farmer() + ", ");
-		System.out.print(prodVO.getBean_el() + ", ");
-		System.out.print(prodVO.getProc() + ", ");
-		System.out.print(prodVO.getRoast() + ", ");
-		System.out.print(prodVO.getBean_attr_acid() + ", ");
-		System.out.print(prodVO.getBean_attr_aroma() + ", ");
-		System.out.print(prodVO.getBean_attr_body() + ", ");
-		System.out.print(prodVO.getBean_attr_after() + ", ");
-		System.out.print(prodVO.getBean_attr_bal() + ", ");
-		System.out.print(prodVO.getBean_aroma() + ", ");
-		System.out.print(prodVO.getProd_price() + ", ");
-		System.out.print(prodVO.getProd_wt() + ", ");
-		System.out.print(prodVO.getSend_fee() + ", ");
-		System.out.print(prodVO.getProd_sup() + ", ");
-		System.out.print(prodVO.getProd_cont() + ", ");
-		System.out.print(prodVO.getProd_pic1() + ", ");
-		System.out.print(prodVO.getProd_pic2() + ", ");
-		System.out.print(prodVO.getProd_pic3() + ", ");
-		System.out.print(prodVO.getProd_stat() + ", ");
-		System.out.print(prodVO.getEd_time() + ", ");
 	}
 	
 	public static void getImageByPKTest(ProdJDBCDAO dao) throws IOException{

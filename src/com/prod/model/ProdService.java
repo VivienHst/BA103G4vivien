@@ -117,6 +117,7 @@ public class ProdService {
 
 	public List<ProdVO> getAllNoImg() {
 		return dao.getAllNoImg();
+
 	}
 
 	public List<byte[]> getImageByPK(String prod_no) {

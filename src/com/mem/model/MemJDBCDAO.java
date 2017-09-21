@@ -4,37 +4,40 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.util.*;
-
-import com.prod.model.ProdJDBCDAO;
-
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class MemJDBCDAO implements MemDAO_interface{
 	
 	String driver = "oracle.jdbc.driver.OracleDriver";
-	String url = "jdbc:oracle:thin:@54.92.7.228:1521:XE";
+	String url = "jdbc:oracle:thin:@localhost:1521:XE";
 	String userid = "ba103g4";
 	String passwd = "123456";
 	private static final String INSERT_STMT = "INSERT INTO MEM VALUES "
 			+ "(?,'U'||mem_NO_seq.NEXTVAL,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+		
 	
 	
-	private static final String UPDATE = "UPDATE MRM SET "
-			+ "MEM_PWD +?,"
-			+ "MEM_LNAME +?,"
-			+ "MEM_FNAME +?,"
-			+ "MEM_EMAIL +?,"
-			+ "MEM_PHONE +?,"
-			+ "MEM_ADD +?,"
-			+ "MEM_PIC +?,"
-			+ "MEM_SET +?,"
-			+ "MEM_TOTAL_PT +?,"
-			+ "MEM_PT +?,"
-			+ "GRADE_NO +?,"
-			+ "MEM_STAT +?,"
-			+ "MEM_STAT_CDATE +?,"
-			+ "MEM_REG_DATE +?,"
+	private static final String UPDATE = "UPDATE MEM SET "
+			+ "MEM_PWD =?,"
+			+ "MEM_LNAME =?,"
+			+ "MEM_FNAME =?,"
+			+ "MEM_EMAIL =?,"
+			+ "MEM_PHONE =?,"
+			+ "MEM_ADD =?,"
+			+ "MEM_PIC =?,"
+			+ "MEM_SET =?,"
+			+ "MEM_TOTAL_PT =?,"
+			+ "MEM_PT =?,"
+			+ "GRADE_NO =?,"
+			+ "MEM_STAT =?,"
+			+ "MEM_STAT_CDATE =?,"
+			+ "MEM_REG_DATE =? "
 			+ "WHERE MEM_AC =?";			
 
 				
@@ -230,10 +233,10 @@ public class MemJDBCDAO implements MemDAO_interface{
 				memVO.setMem_set(rs.getString("mem_set"));
 				memVO.setMem_total_pt(rs.getInt("mem_total_pt"));
 				memVO.setMem_pt(rs.getInt("mem_pt"));
-				memVO.setGrade_no(rs.getInt("mem_no"));
+				memVO.setGrade_no(rs.getInt("grade_no"));
 				memVO.setMem_stat(rs.getString("mem_stat"));
 				memVO.setMem_stat_cdate(rs.getDate("mem_stat_cdate"));
-				memVO.setMem_reg_date(rs.getDate("mem__reg_date"));
+				memVO.setMem_reg_date(rs.getDate("mem_reg_date"));
 			}
 			
 		} catch (ClassNotFoundException e) {
@@ -298,10 +301,10 @@ public class MemJDBCDAO implements MemDAO_interface{
 				memVO.setMem_set(rs.getString("mem_set"));
 				memVO.setMem_total_pt(rs.getInt("mem_total_pt"));
 				memVO.setMem_pt(rs.getInt("mem_pt"));
-				memVO.setGrade_no(rs.getInt("mem_no"));
+				memVO.setGrade_no(rs.getInt("grade_no"));
 				memVO.setMem_stat(rs.getString("mem_stat"));
 				memVO.setMem_stat_cdate(rs.getDate("mem_stat_cdate"));
-				memVO.setMem_reg_date(rs.getDate("mem__reg_date"));	
+				memVO.setMem_reg_date(rs.getDate("mem_reg_date"));	
 				list.add(memVO);
 			}
 			
@@ -339,10 +342,12 @@ public class MemJDBCDAO implements MemDAO_interface{
 	
 	public static void main (String[] args) throws IOException{
 		MemJDBCDAO dao = new MemJDBCDAO();
-		//getByPrimaryKeyTest(dao);
+
 //		insertTest(dao);
 //      updateTest(dao);
+//		getByPrimaryKeyTest(dao);
 //		dao.delete("testtest11");
+		getAllTest(dao);
 
 	}
 	
@@ -355,7 +360,7 @@ public class MemJDBCDAO implements MemDAO_interface{
 		memVO01.setMem_email("testtest@test.com");
 		memVO01.setMem_phone("0912345789");
 		memVO01.setMem_add("宜蘭縣壯圍鄉壯圍鄉美福路16號之1");
-		memVO01.setMem_pic(getPictureByteArray("C:\\Users\\Java\\Desktop\\專題用圖片\\mem01.jpg"));
+		memVO01.setMem_pic(getPictureByteArray("C:\\Users\\Java\\Desktop\\專題用圖片\\mem02.jpg"));
 		memVO01.setMem_set("肯亞,半水洗,深焙");
 		memVO01.setMem_total_pt(200);
 		memVO01.setMem_pt(50);
@@ -378,7 +383,7 @@ public class MemJDBCDAO implements MemDAO_interface{
 		memVO01.setMem_email("testtest@test.com");
 		memVO01.setMem_phone("0912345789");
 		memVO01.setMem_add("宜蘭縣壯圍鄉壯圍鄉美福路16號之1");
-		memVO01.setMem_pic(getPictureByteArray("C:\\Users\\Java\\Desktop\\專題用圖片\\mem01.jpg"));
+		memVO01.setMem_pic(getPictureByteArray("C:\\Users\\Java\\Desktop\\專題用圖片\\mem02.jpg"));
 		memVO01.setMem_set("肯亞,半水洗,深焙");
 		memVO01.setMem_total_pt(200);
 		memVO01.setMem_pt(50);
@@ -409,6 +414,30 @@ public class MemJDBCDAO implements MemDAO_interface{
 		System.out.println(memVO.getMem_stat() + ", ");
 		System.out.println(memVO.getMem_stat_cdate() + ", ");
 		System.out.println(memVO.getMem_reg_date() + ", ");
+	}
+	
+	public static void getAllTest(MemJDBCDAO dao){
+		
+		List<MemVO> list = dao.getAll();
+		for (MemVO memVO : list) {
+			System.out.println(memVO.getMem_no() + ", ");
+			System.out.println(memVO.getMem_ac() + ", ");
+			System.out.println(memVO.getMem_pwd() + ", ");
+			System.out.println(memVO.getMem_lname() + ", ");
+			System.out.println(memVO.getMem_fname() + ", ");
+			System.out.println(memVO.getMem_email() + ", ");
+			System.out.println(memVO.getMem_phone() + ", ");
+			System.out.println(memVO.getMem_add() + ", ");
+			System.out.println(memVO.getMem_pic() + ", ");
+			System.out.println(memVO.getMem_set() + ", ");
+			System.out.println(memVO.getMem_total_pt() + ", ");
+			System.out.println(memVO.getMem_pt() + ", ");
+			System.out.println(memVO.getGrade_no() + ", ");
+			System.out.println(memVO.getMem_stat() + ", ");
+			System.out.println(memVO.getMem_stat_cdate() + ", ");
+			System.out.println(memVO.getMem_reg_date() + ", ");
+			System.out.println("=================================");
+		}
 	}
 	
 	
