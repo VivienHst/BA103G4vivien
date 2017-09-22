@@ -55,7 +55,7 @@ public class Like_revServletForApp extends HttpServlet {
 			
 			String rev_no = jsonObject.get("rev_no").getAsString();
 			System.out.println(rev_no);
-			likeCont = like_revSvc.getCountByRev("R1000000003");
+			likeCont = like_revSvc.getCountByRev(rev_no);
 			outStr = gson.toJson(likeCont);
 			response.setContentType(CONTENT_TYPE);
 			PrintWriter out=response.getWriter();
