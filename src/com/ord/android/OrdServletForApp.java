@@ -18,6 +18,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.beanlife.android.tool.ImageUtil;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import com.ord.model.OrdService;
 import com.ord.model.OrdVO;
@@ -60,7 +61,7 @@ public class OrdServletForApp extends HttpServlet {
 		
 		
 		
-		Gson gson = new Gson();
+		Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd").create();
 		BufferedReader br = request.getReader();
 		StringBuilder jsonIn = new StringBuilder();
 		String line = null;
@@ -102,8 +103,10 @@ public class OrdServletForApp extends HttpServlet {
 			System.out.println(detailList.toString());
 			
 			while (detailListIt.hasNext()){
-				ordDetailList.add((Ord_listVO) detailListIt);	
+				System.out.println("detailListIt : " + detailListIt);
+				ordDetailList.add((Ord_listVO) detailListIt.next());	
 			}
+			System.out.println("ordDetailList : " + ordDetailList.toString());
 			
 			outStr = gson.toJson(ordDetailList);
 			response.setContentType(CONTENT_TYPE);
