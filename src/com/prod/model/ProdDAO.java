@@ -94,6 +94,7 @@ public class ProdDAO implements ProdDAO_interface {
 	private static final String GET_IMG_BY_PK_STMT = "SELECT PROD_PIC1,PROD_PIC2,PROD_PIC3 FROM PROD WHERE PROD_NO = ?"; 
 	private static final String GET_QUERY_RESULT = "SELECT * FROM PROD WHERE BEAN_CONTRY LIKE ? AND PROC LIKE ? AND ROAST LIKE ? AND PROD_NAME LIKE ?";
 	private static final String GET_ONE_NO_IMG_STMT = "SELECT "
+			+ "PROD_NO,"
 			+ "STORE_NO," 
 			+ "PROD_NAME," 
 			+ "BEAN_TYPE," 
@@ -710,7 +711,7 @@ public class ProdDAO implements ProdDAO_interface {
 				prodVO.setBean_attr_body(rs.getInt("bean_attr_body"));
 				prodVO.setBean_attr_after(rs.getInt("bean_attr_after"));
 				prodVO.setBean_attr_bal(rs.getInt("bean_attr_bal"));
-				prodVO.setBean_aroma(rs.getString("Bean_aroma"));
+				prodVO.setBean_aroma(rs.getString("bean_aroma"));
 				prodVO.setProd_price(rs.getInt("prod_price"));
 				prodVO.setProd_wt(rs.getDouble("prod_wt"));
 				prodVO.setSend_fee(rs.getInt("send_fee"));

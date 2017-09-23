@@ -95,6 +95,7 @@ public class ProdJNDIDAO implements ProdDAO_interface {
 	private static final String GET_QUERY_RESULT = "SELECT * FROM PROD WHERE BEAN_CONTRY LIKE ? AND PROC LIKE ? AND ROAST LIKE ? AND PROD_NAME LIKE ?";
 	
 	private static final String GET_ONE_NO_IMG_STMT = "SELECT "
+			+ "PROD_NO,"
 			+ "STORE_NO," 
 			+ "PROD_NAME," 
 			+ "BEAN_TYPE," 

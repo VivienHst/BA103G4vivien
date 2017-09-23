@@ -13,8 +13,8 @@
 	</classpathentry>
 	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.module.container"/>
 	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.web.container"/>
-	<classpathentry kind="lib" path="/Users/vivienhuang/Documents/myLib/gson-2.3.1.jar"/>
-	<classpathentry kind="lib" path="/Users/vivienhuang/Documents/myLib/json.jar"/>
-	<classpathentry kind="lib" path="/Users/vivienhuang/Documents/myLib/gson-2.3.1-sources.jar"/>
+	<classpathentry kind="lib" path="C:/myLip/gson-2.3.1.jar"/>
+	<classpathentry kind="lib" path="C:/myLip/json.jar"/>
+	<classpathentry kind="lib" path="C:/myLip/gson-2.2.4-sources.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>

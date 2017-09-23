@@ -33,7 +33,7 @@ public class ProdServletForApp extends HttpServlet {
 	
 	private ProdService prodSvc;
 	private List<ProdVO> list;
-//	private ProdVO prodVO ;
+	private ProdVO prodVO ;
 	private List<ProdVO> prodList;
 	private List<byte[]> prodImage;
 	private ReviewService revSvc;
@@ -84,7 +84,15 @@ public class ProdServletForApp extends HttpServlet {
 			response.setContentType(CONTENT_TYPE);
 			PrintWriter out = response.getWriter();
 			out.println(outStr);
-		}else if(action.equals("getImage")){
+		} else if(action.equals("getOneProd")){
+			String prod_no = jsonObject.get("prod_no").getAsString();
+			System.out.println(prod_no);
+			prodVO = prodSvc.getOneProdNoImg(prod_no);
+			outStr = gson.toJson(prodVO);
+			response.setContentType(CONTENT_TYPE);
+			PrintWriter out=response.getWriter();
+			out.println(outStr);
+		} else if(action.equals("getImage")){
 			OutputStream os = response.getOutputStream();
 			String prod_no = jsonObject.get("prod_no").getAsString();
 			int imageSize = jsonObject.get("imageSize").getAsInt();
