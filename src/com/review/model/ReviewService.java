@@ -66,4 +66,8 @@ public class ReviewService {
 	public Double getScoreByProd(String prod_no) {
 		return  dao.scoreByProd(prod_no);
 	}
+	
+	public ReviewVO findByOrdAndProd(String ord_no, String prod_no){
+		return  dao.findByOrdAndProd(ord_no, prod_no);
+	}
 }
