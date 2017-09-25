@@ -16,6 +16,7 @@ import javax.servlet.http.HttpServletResponse;
 import com.beanlife.android.tool.ImageUtil;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
+import com.review.model.ReviewVO;
 import com.store.model.StoreService;
 import com.store.model.StoreVO;
 
@@ -94,15 +95,15 @@ public class StoreServletForApp extends HttpServlet {
 			os.write(Store_pic1);
 			os.flush();
 			os.close();			
-		} 
-		else if(action.equals("getOneStore")){
+		} else if(action.equals("getOneStore")){
 			String storeNo = jsonObject.get("Store_no").getAsString();
 			storeVO = storeSvc.getOneStoreNoImg(storeNo);
 			System.out.println(storeVO.getStore_no());
 			outStr = gson.toJson(storeVO);
 			response.setContentType(CONTENT_TYPE);
 			PrintWriter out = response.getWriter();
-			out.println(outStr);			
+			out.println(outStr);
+			
 		} else{
 			doGet(request, response);
 		}

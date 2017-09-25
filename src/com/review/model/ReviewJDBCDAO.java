@@ -655,7 +655,7 @@ public class ReviewJDBCDAO implements ReviewDAO_interface {
 		//查分數
 //		System.out.println(dao.scoreByProd("P1000000002"));
 		//查詢一筆訂單&商品的評論
-				ReviewVO reviewVO3 = dao.findByOrdAndPrdo("O1000000001", "P1000000001");
+				ReviewVO reviewVO3 = dao.findByOrdAndProd("O1000000001", "P1000000001");
 				System.out.print(reviewVO3.getRev_no() + ",");
 				System.out.print(reviewVO3.getOrd_no() + ",");
 				System.out.print(reviewVO3.getProd_no() + ",");

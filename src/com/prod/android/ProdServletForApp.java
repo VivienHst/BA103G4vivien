@@ -84,6 +84,7 @@ public class ProdServletForApp extends HttpServlet {
 			response.setContentType(CONTENT_TYPE);
 			PrintWriter out = response.getWriter();
 			out.println(outStr);
+			
 		} else if(action.equals("getOneProd")){
 			String prod_no = jsonObject.get("prod_no").getAsString();
 			System.out.println(prod_no);
@@ -92,14 +93,14 @@ public class ProdServletForApp extends HttpServlet {
 			response.setContentType(CONTENT_TYPE);
 			PrintWriter out=response.getWriter();
 			out.println(outStr);
+			
 		} else if(action.equals("getImage")){
 			OutputStream os = response.getOutputStream();
 			String prod_no = jsonObject.get("prod_no").getAsString();
 			int imageSize = jsonObject.get("imageSize").getAsInt();
 			prodImage = prodSvc.getImageByPK(prod_no);
 			byte[] prod_pic1 = prodImage.get(0);
-			if(prod_pic1 != null){
-				
+			if(prod_pic1 != null){	
 				//把壓縮圖片寫在DAO測試速度
 				prod_pic1 = ImageUtil.shrink(prod_pic1, imageSize);
 				response.setContentType("image/jpeg");
@@ -125,6 +126,7 @@ public class ProdServletForApp extends HttpServlet {
 			response.setContentType(CONTENT_TYPE);
 			PrintWriter out = response.getWriter();
 			out.println(outStr);
+			
 		}else if(action.equals("getScore")){
 			revSvc = new ReviewService();
 			String prod_no = jsonObject.get("prod_no").getAsString();
