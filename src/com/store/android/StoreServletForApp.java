@@ -96,7 +96,7 @@ public class StoreServletForApp extends HttpServlet {
 			os.flush();
 			os.close();			
 		} else if(action.equals("getOneStore")){
-			String storeNo = jsonObject.get("Store_no").getAsString();
+			String storeNo = jsonObject.get("store_no").getAsString();
 			storeVO = storeSvc.getOneStoreNoImg(storeNo);
 			System.out.println(storeVO.getStore_no());
 			outStr = gson.toJson(storeVO);

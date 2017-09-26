@@ -1,4 +1,4 @@
-package com.cart.android;
+package com.cart_list.android;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -23,6 +23,8 @@ import com.google.gson.JsonObject;
 import com.ord.model.OrdService;
 import com.ord.model.OrdVO;
 import com.ord_list.model.Ord_listVO;
+import com.prod.model.ProdService;
+import com.prod.model.ProdVO;
 
 /**
  * Servlet implementation class Cart_listServletForApp
@@ -90,27 +92,78 @@ public class Cart_listServletForApp extends HttpServlet {
 			PrintWriter out = response.getWriter();
 		 	out.println(outStr);
 		 	
-		}else if(action.equals("addCart_list")){
-			
+		} else if(action.equals("addCart_list")){
+			boolean isAddToCar = false;
+			ProdVO prodVO;
+			ProdService prodSvc;
 			String mem_ac = jsonObject.get("mem_ac").getAsString();
 			System.out.println("mem_ac : " + mem_ac );
 			String prod_no = jsonObject.get("prod_no").getAsString();
 			System.out.println("prod_no : " + prod_no );
 			int prod_amount = Integer.parseInt(jsonObject.get("prod_amount").getAsString());
-			System.out.println("mem_ac : " + mem_ac );
+			System.out.println("prod_amount : " + prod_amount );
 
 			Cart_listVO oldCart_listVO = null;
 			Cart_listVO cartList = new Cart_listVO();
 
 			if((oldCart_listVO = cart_listSvc.getCart_list(prod_no, mem_ac)) == null){
 				cartList = cart_listSvc.addCart_list(prod_no,mem_ac,prod_amount);
+				isAddToCar = true;
 			} else {
-				cartList = cart_listSvc.updateCart_list(prod_no, mem_ac, prod_amount);
-			}			
-			outStr = gson.toJson(cartList);
+				prodSvc = new ProdService();
+				prodVO = prodSvc.getOneProd(prod_no);
+				
+				prod_amount = prod_amount + oldCart_listVO.getProd_amount();
+				if(prod_amount <= prodVO.getProd_sup()){
+					cartList = cart_listSvc.updateCart_list(prod_no, mem_ac, prod_amount);
+					isAddToCar = true;
+				}
+			}
+			System.out.println("isAddToCar : " + isAddToCar );
+			outStr = gson.toJson(isAddToCar);
 			response.setContentType(CONTENT_TYPE);
 			PrintWriter out = response.getWriter();
 		 	out.println(outStr);
+		} else if(action.equals("updateCart_list")){
+			boolean isAddToCar = false;
+			ProdVO prodVO;
+			ProdService prodSvc;
+			String mem_ac = jsonObject.get("mem_ac").getAsString();
+			System.out.println("mem_ac : " + mem_ac );
+			String prod_no = jsonObject.get("prod_no").getAsString();
+			System.out.println("prod_no : " + prod_no );
+			int prod_amount = Integer.parseInt(jsonObject.get("prod_amount").getAsString());
+			System.out.println("prod_amount : " + prod_amount );
+
+			Cart_listVO cartList = new Cart_listVO();
+	
+				prodSvc = new ProdService();
+				prodVO = prodSvc.getOneProd(prod_no);
+				
+				if(prod_amount <= prodVO.getProd_sup()){
+					cartList = cart_listSvc.updateCart_list(prod_no, mem_ac, prod_amount);
+					isAddToCar = true;
+				}
+							
+			System.out.println("isAddToCar : " + isAddToCar );
+			outStr = gson.toJson(isAddToCar);
+			response.setContentType(CONTENT_TYPE);
+			PrintWriter out = response.getWriter();
+		 	out.println(outStr);
+		} else if(action.equals("deleteCart_list")){
+
+			String mem_ac = jsonObject.get("mem_ac").getAsString();
+			System.out.println("mem_ac : " + mem_ac );
+			String prod_no = jsonObject.get("prod_no").getAsString();
+			System.out.println("prod_no : " + prod_no );
+			
+			cart_listSvc.deleteCart_list(prod_no, mem_ac);
+						
+//			System.out.println("isAddToCar : " + isAddToCar );
+//			outStr = gson.toJson("delete");
+//			response.setContentType(CONTENT_TYPE);
+//			PrintWriter out = response.getWriter();
+//		 	out.println(outStr);
 		}
 		
 		else{
