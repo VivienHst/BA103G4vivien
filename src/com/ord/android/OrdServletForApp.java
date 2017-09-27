@@ -112,6 +112,53 @@ public class OrdServletForApp extends HttpServlet {
 			response.setContentType(CONTENT_TYPE);
 			PrintWriter out = response.getWriter();
 		 	out.println(outStr);
+		 	
+		}else if(action.equals("getOrd_listByOrd")){
+			
+			String ord_no = jsonObject.get("ord_no").getAsString();
+			System.out.println("ord_no : " + ord_no);
+			ordDetailList = new ArrayList<Ord_listVO>();
+			detailList = new HashSet<Ord_listVO>();
+			detailList = ordSvc.getOrd_listByOrd(ord_no);
+			Iterator<Ord_listVO> detailListIt = detailList.iterator();
+			System.out.println(detailList.toString());
+			
+			while (detailListIt.hasNext()){
+				System.out.println("detailListIt : " + detailListIt);
+				ordDetailList.add((Ord_listVO) detailListIt.next());	
+			}
+			System.out.println("ordDetailList : " + ordDetailList.toString());
+			
+			outStr = gson.toJson(ordDetailList);
+			response.setContentType(CONTENT_TYPE);
+			PrintWriter out = response.getWriter();
+		 	out.println(outStr);
+		 	
+		}else if(action.equals("newAnOrder")){
+			
+//			public String newAnOrder(OrdVO ordVO, Set<Ord_listVO> ord_listVOs){
+//				return dao.insertWithOrd_list(ordVO, ord_listVOs);
+//			}
+////			
+//			String ord_no = jsonObject.get("ordVO").getAsString();
+//			String Ord_listVO = jsonObject.get("Ord_listVO").getAsString();
+//
+//			ordDetailList = new ArrayList<Ord_listVO>();
+//			detailList = new HashSet<Ord_listVO>();
+//			detailList = ordSvc.getOrd_listByOrd(ord_no);
+//			Iterator<Ord_listVO> detailListIt = detailList.iterator();
+//			System.out.println(detailList.toString());
+//			
+//			while (detailListIt.hasNext()){
+//				System.out.println("detailListIt : " + detailListIt);
+//				ordDetailList.add((Ord_listVO) detailListIt.next());	
+//			}
+//			System.out.println("ordDetailList : " + ordDetailList.toString());
+//			
+//			outStr = gson.toJson(ordDetailList);
+//			response.setContentType(CONTENT_TYPE);
+//			PrintWriter out = response.getWriter();
+//		 	out.println(outStr);
 		}
 		
 		else{

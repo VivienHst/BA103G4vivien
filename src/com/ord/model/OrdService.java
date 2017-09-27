@@ -1,6 +1,7 @@
 package com.ord.model;
 
 import java.sql.Date;
+import java.sql.Timestamp;
 import java.util.List;
 import java.util.Set;
 
@@ -14,8 +15,8 @@ public class OrdService {
 	}
 	
 	public OrdVO addOrd(String ord_no, String mem_ac, Integer send_fee, Integer total_pay, String ord_name, String ord_phone,
-			String ord_add, String pay_info, String ord_stat, Date ord_date, Date pay_date, Date pay_chk_date,
-			Date send_date, String send_id) {
+			String ord_add, String pay_info, String ord_stat, Timestamp ord_date, Timestamp pay_date, Timestamp pay_chk_date,
+			Timestamp send_date, String send_id) {
 
 		OrdVO ordVO = new OrdVO();
 		ordVO.setOrd_no(ord_no);
@@ -43,8 +44,8 @@ public class OrdService {
 	}
 	
 	public OrdVO updateOrd(String ord_no, String mem_ac, Integer send_fee, Integer total_pay, String ord_name, String ord_phone,
-			String ord_add, String pay_info, String ord_stat, Date ord_date, Date pay_date, Date pay_chk_date,
-			Date send_date, String send_id) {
+			String ord_add, String pay_info, String ord_stat, Timestamp ord_date, Timestamp pay_date, Timestamp pay_chk_date,
+			Timestamp send_date, String send_id) {
 
 		OrdVO ordVO = new OrdVO();
 		ordVO.setOrd_no(ord_no);
@@ -71,7 +72,6 @@ public class OrdService {
 		dao.update(ordVO);
 	}
 	
-
 	public void deleteOrd(String ord_no) {
 		dao.delete(ord_no);
 	}
@@ -87,14 +87,13 @@ public class OrdService {
 	public Set<Ord_listVO> getOrd_listByOrd(String ord_no){
 		return dao.getOrd_listByOrd(ord_no);
 	}
-	
-	
+		
 	public List<OrdVO> getOrdByMem_ac(String mem_ac){
 		return dao.getOrdByMem_ac(mem_ac);
 	}
 	
-	
-	
-	
+	public String newAnOrder(OrdVO ordVO, Set<Ord_listVO> ord_listVOs){
+		return dao.insertWithOrd_list(ordVO, ord_listVOs);
+	}
 	
 }

@@ -2,6 +2,7 @@ package com.ord.model;
 
 import java.io.Serializable;
 import java.sql.Date;
+import java.sql.Timestamp;
 
 public class OrdVO implements Serializable{
 	private String ord_no;
@@ -13,10 +14,10 @@ public class OrdVO implements Serializable{
 	private String ord_add;
 	private String pay_info;
 	private String ord_stat;
-	private Date ord_date;
-	private Date pay_date;
-	private Date pay_chk_date;
-	private Date send_date;
+	private Timestamp ord_date;
+	private Timestamp pay_date;
+	private Timestamp pay_chk_date;
+	private Timestamp send_date;
 	private String send_id;
 	
 	
@@ -75,28 +76,28 @@ public class OrdVO implements Serializable{
 	public void setOrd_stat(String ord_stat) {
 		this.ord_stat = ord_stat;
 	}
-	public Date getOrd_date() {
+	public Timestamp getOrd_date() {
 		return ord_date;
 	}
-	public void setOrd_date(Date ord_date) {
+	public void setOrd_date(Timestamp ord_date) {
 		this.ord_date = ord_date;
 	}
-	public Date getPay_date() {
+	public Timestamp getPay_date() {
 		return pay_date;
 	}
-	public void setPay_date(Date pay_date) {
+	public void setPay_date(Timestamp pay_date) {
 		this.pay_date = pay_date;
 	}
-	public Date getPay_chk_date() {
+	public Timestamp getPay_chk_date() {
 		return pay_chk_date;
 	}
-	public void setPay_chk_date(Date pay_chk_date) {
+	public void setPay_chk_date(Timestamp pay_chk_date) {
 		this.pay_chk_date = pay_chk_date;
 	}
-	public Date getSend_date() {
+	public Timestamp getSend_date() {
 		return send_date;
 	}
-	public void setSend_date(Date send_date) {
+	public void setSend_date(Timestamp send_date) {
 		this.send_date = send_date;
 	}
 	public String getSend_id() {
