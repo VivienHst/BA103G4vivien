@@ -124,6 +124,7 @@ public class Cart_listServletForApp extends HttpServlet {
 			response.setContentType(CONTENT_TYPE);
 			PrintWriter out = response.getWriter();
 		 	out.println(outStr);
+		 	
 		} else if(action.equals("updateCart_list")){
 			boolean isAddToCar = false;
 			ProdVO prodVO;
@@ -137,13 +138,13 @@ public class Cart_listServletForApp extends HttpServlet {
 
 			Cart_listVO cartList = new Cart_listVO();
 	
-				prodSvc = new ProdService();
-				prodVO = prodSvc.getOneProd(prod_no);
+			prodSvc = new ProdService();
+			prodVO = prodSvc.getOneProd(prod_no);
 				
-				if(prod_amount <= prodVO.getProd_sup()){
-					cartList = cart_listSvc.updateCart_list(prod_no, mem_ac, prod_amount);
-					isAddToCar = true;
-				}
+			if(prod_amount <= prodVO.getProd_sup()){
+				cartList = cart_listSvc.updateCart_list(prod_no, mem_ac, prod_amount);
+				isAddToCar = true;
+			}
 							
 			System.out.println("isAddToCar : " + isAddToCar );
 			outStr = gson.toJson(isAddToCar);

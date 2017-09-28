@@ -25,7 +25,7 @@ import com.ord_list.model.Ord_listVO;
 
 
 
-public class OrdDAO implements OrdDAO_interface {
+public class OrdJNDIDAO implements OrdDAO_interface {
 	
 	private static DataSource ds = null;
 	static {
@@ -370,7 +370,7 @@ public class OrdDAO implements OrdDAO_interface {
 			pstmt.setString(6, ordVO.getOrd_add());
 			pstmt.setString(7, ordVO.getPay_info());
 			pstmt.setString(8, ordVO.getOrd_stat());
-			pstmt.setTimestamp(9, new Timestamp(System.currentTimeMillis()));
+			pstmt.setTimestamp(9, (ordVO.getOrd_date()!=null)? new Timestamp(ordVO.getOrd_date().getTime()):null);
 			pstmt.setTimestamp(10, (ordVO.getPay_date()!=null)?new Timestamp(ordVO.getPay_date().getTime()):null);
 			pstmt.setTimestamp(11, (ordVO.getPay_chk_date()!=null)?new Timestamp(ordVO.getPay_chk_date().getTime()):null);
 			pstmt.setTimestamp(12, (ordVO.getSend_date()!=null)?new Timestamp(ordVO.getSend_date().getTime()):null);

@@ -4,8 +4,11 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintWriter;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Enumeration;
 import java.util.HashSet;
+import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
@@ -20,9 +23,11 @@ import com.beanlife.android.tool.ImageUtil;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
+import com.google.gson.reflect.TypeToken;
 import com.ord.model.OrdService;
 import com.ord.model.OrdVO;
 import com.ord_list.model.Ord_listVO;
+import com.review.model.ReviewVO;
 import com.store.model.StoreService;
 import com.store.model.StoreVO;
 
@@ -41,9 +46,7 @@ public class OrdServletForApp extends HttpServlet {
 	private Set<Ord_listVO>  detailList;
 	private List<Ord_listVO>  ordDetailList;
 	
-
 	
-       
     public OrdServletForApp() {
         super();
 
@@ -135,33 +138,38 @@ public class OrdServletForApp extends HttpServlet {
 		 	out.println(outStr);
 		 	
 		}else if(action.equals("newAnOrder")){
-			
-//			public String newAnOrder(OrdVO ordVO, Set<Ord_listVO> ord_listVOs){
-//				return dao.insertWithOrd_list(ordVO, ord_listVOs);
-//			}
-////			
-//			String ord_no = jsonObject.get("ordVO").getAsString();
-//			String Ord_listVO = jsonObject.get("Ord_listVO").getAsString();
-//
-//			ordDetailList = new ArrayList<Ord_listVO>();
-//			detailList = new HashSet<Ord_listVO>();
-//			detailList = ordSvc.getOrd_listByOrd(ord_no);
-//			Iterator<Ord_listVO> detailListIt = detailList.iterator();
-//			System.out.println(detailList.toString());
-//			
-//			while (detailListIt.hasNext()){
-//				System.out.println("detailListIt : " + detailListIt);
-//				ordDetailList.add((Ord_listVO) detailListIt.next());	
-//			}
-//			System.out.println("ordDetailList : " + ordDetailList.toString());
-//			
-//			outStr = gson.toJson(ordDetailList);
-//			response.setContentType(CONTENT_TYPE);
-//			PrintWriter out = response.getWriter();
-//		 	out.println(outStr);
-		}
+			OrdVO ordVO1 = new OrdVO();
+			Set<Ord_listVO> ord_listVOs = new HashSet<Ord_listVO>();
 		
-		else{
+			String ordVOFromApp = jsonObject.get("ordVO").getAsString();
+			String Ord_listVO = jsonObject.get("Ord_listVO").getAsString();
+
+			Type ordVOType = new TypeToken<OrdVO>(){}.getType();
+			ordVO1 = gson.fromJson(ordVOFromApp, ordVOType);
+			System.out.println("getOrd_name : " + ordVO1.getOrd_name());
+
+			Hashtable<String,Integer> getordListFromApp = new Hashtable<String,Integer>();
+			Type setType = new TypeToken<Hashtable<String,Integer>>(){}.getType();
+			ordVO1 = gson.fromJson(ordVOFromApp, ordVOType);
+			getordListFromApp = gson.fromJson(Ord_listVO, setType);
+			
+			 Enumeration<String> keyset = getordListFromApp.keys();
+			    while (keyset.hasMoreElements()) {		        
+					Ord_listVO ordListIt = new Ord_listVO();
+					String prodNo = keyset.nextElement();				
+					ordListIt.setProd_no(prodNo);	
+					System.out.println("prod_no : " + prodNo);
+				
+					ordListIt.setAmont(getordListFromApp.get(prodNo).intValue());
+					System.out.println("prod_amont : " + getordListFromApp.get(prodNo).intValue());
+
+					ord_listVOs.add(ordListIt);
+			        
+			    }
+		
+			ordSvc.newAnOrder(ordVO1, ord_listVOs);
+		
+		} else{
 			doGet(request, response);
 		}
 	
