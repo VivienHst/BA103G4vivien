@@ -156,22 +156,12 @@ public class Cart_listServletForApp extends HttpServlet {
 			String mem_ac = jsonObject.get("mem_ac").getAsString();
 			System.out.println("mem_ac : " + mem_ac );
 			String prod_no = jsonObject.get("prod_no").getAsString();
-			System.out.println("prod_no : " + prod_no );
+			System.out.println("prod_no : " + prod_no );	
 			
-			cart_listSvc.deleteCart_list(prod_no, mem_ac);
-						
-//			System.out.println("isAddToCar : " + isAddToCar );
-//			outStr = gson.toJson("delete");
-//			response.setContentType(CONTENT_TYPE);
-//			PrintWriter out = response.getWriter();
-//		 	out.println(outStr);
-		}
-		
-		else{
+			cart_listSvc.deleteCart_list(prod_no, mem_ac);					
+		} else{
 			doGet(request, response);
 		}
-			
-	
 	}
 
 

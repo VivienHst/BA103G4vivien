@@ -20,6 +20,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.beanlife.android.tool.ImageUtil;
+import com.cart_list.model.Cart_listService;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
@@ -45,6 +46,7 @@ public class OrdServletForApp extends HttpServlet {
 	private List<OrdVO> ordList;
 	private Set<Ord_listVO>  detailList;
 	private List<Ord_listVO>  ordDetailList;
+	private Cart_listService cart_listSvc;
 	
 	
     public OrdServletForApp() {
@@ -61,9 +63,7 @@ public class OrdServletForApp extends HttpServlet {
 		request.setCharacterEncoding("UTF-8");
 		
 		ordSvc = new OrdService();
-		
-		
-		
+			
 		Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd").create();
 		BufferedReader br = request.getReader();
 		StringBuilder jsonIn = new StringBuilder();
@@ -85,7 +85,6 @@ public class OrdServletForApp extends HttpServlet {
 			list = new ArrayList<OrdVO>();
 			list = ordSvc.getOrdByMem_ac(mem_ac);
 			ordList = new ArrayList<OrdVO>();
-			System.out.println(list.toString());
 			
 			for(OrdVO list : list){
 				ordList.add(list);
@@ -103,13 +102,10 @@ public class OrdServletForApp extends HttpServlet {
 			detailList = new HashSet<Ord_listVO>();
 			detailList = ordSvc.getOrd_listByOrd(ord_no);
 			Iterator<Ord_listVO> detailListIt = detailList.iterator();
-			System.out.println(detailList.toString());
 			
 			while (detailListIt.hasNext()){
-				System.out.println("detailListIt : " + detailListIt);
 				ordDetailList.add((Ord_listVO) detailListIt.next());	
 			}
-			System.out.println("ordDetailList : " + ordDetailList.toString());
 			
 			outStr = gson.toJson(ordDetailList);
 			response.setContentType(CONTENT_TYPE);
@@ -124,10 +120,8 @@ public class OrdServletForApp extends HttpServlet {
 			detailList = new HashSet<Ord_listVO>();
 			detailList = ordSvc.getOrd_listByOrd(ord_no);
 			Iterator<Ord_listVO> detailListIt = detailList.iterator();
-			System.out.println(detailList.toString());
 			
 			while (detailListIt.hasNext()){
-				System.out.println("detailListIt : " + detailListIt);
 				ordDetailList.add((Ord_listVO) detailListIt.next());	
 			}
 			System.out.println("ordDetailList : " + ordDetailList.toString());
@@ -139,6 +133,7 @@ public class OrdServletForApp extends HttpServlet {
 		 	
 		}else if(action.equals("newAnOrder")){
 			OrdVO ordVO1 = new OrdVO();
+			cart_listSvc = new Cart_listService();
 			Set<Ord_listVO> ord_listVOs = new HashSet<Ord_listVO>();
 		
 			String ordVOFromApp = jsonObject.get("ordVO").getAsString();
@@ -164,9 +159,13 @@ public class OrdServletForApp extends HttpServlet {
 					System.out.println("prod_amont : " + getordListFromApp.get(prodNo).intValue());
 
 					ord_listVOs.add(ordListIt);
+					
+					//刪除購物車內商品
+					cart_listSvc.deleteCart_list(prodNo, ordVO1.getMem_ac());
+					System.out.println(prodNo + " : " +ordVO1.getMem_ac());
 			        
 			    }
-		
+			
 			ordSvc.newAnOrder(ordVO1, ord_listVOs);
 		
 		} else{
