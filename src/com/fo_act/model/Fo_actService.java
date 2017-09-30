@@ -20,6 +20,16 @@ public class Fo_actService {
 		return fo_act_VO;
 		
 	}
+	public Fo_actVO addFo_act(String mem_ac,String act_no){
+		Fo_actVO fo_act_VO =new Fo_actVO();
+		fo_act_VO.setMem_ac(mem_ac);
+		fo_act_VO.setAct_no(act_no);		
+		
+		dao.insert(fo_act_VO);
+		return fo_act_VO;
+		
+	}
+	
 	public Fo_actVO updateFo_act(String mem_ac,String act_no,Date fo_act_date){
 		Fo_actVO fo_act_VO =new Fo_actVO();
 		fo_act_VO.setMem_ac(mem_ac);
@@ -41,6 +51,14 @@ public class Fo_actService {
 	public List<Fo_actVO>getAll(){
 		return dao.getAll();
 	}
+	
+    public List<Fo_actVO> getFo_actByMem_ac(String mem_ac){
+    	return dao.getFo_actByMem_ac(mem_ac);
+    }
+    
+    public int countByAct(String act_no){
+    	return dao.countByAct(act_no);
+    }
 	
 	
 }

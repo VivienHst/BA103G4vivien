@@ -17,6 +17,8 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.mem.model.MemService;
 import com.mem.model.MemVO;
+import com.ord.model.OrdService;
+import com.ord.model.OrdVO;
 
 /**
  * Servlet implementation class MemServletForApp
@@ -33,6 +35,9 @@ public class MemServletForApp extends HttpServlet {
     private MemVO memVO;
     private byte[] mem_pic;
     private boolean logInPrem;
+	private OrdService ordSvc;
+	private OrdVO ordVO;
+
     
 
     public MemServletForApp() {
@@ -67,6 +72,7 @@ public class MemServletForApp extends HttpServlet {
 			response.setContentType(CONTENT_TYPE);
 			PrintWriter out=response.getWriter();
 			out.println(outStr);
+			
 		}else if(action.equals("getImage")){
 			OutputStream os = response.getOutputStream();
 			String mem_ac = jsonObject.get("mem_ac").getAsString();
@@ -81,8 +87,7 @@ public class MemServletForApp extends HttpServlet {
 			os.flush();
 			os.close();
 			
-		}
-		else if(action.equals("logIn")){
+		} else if(action.equals("logIn")){
 			logInPrem = false;
 			String mem_ac = jsonObject.get("mem_ac").getAsString();
 			System.out.println(mem_ac);
@@ -98,6 +103,23 @@ public class MemServletForApp extends HttpServlet {
 			response.setContentType(CONTENT_TYPE);
 			PrintWriter out=response.getWriter();
 			out.println(logInPrem);
+		} else if(action.equals("getMemByOrd")){
+			ordVO = new OrdVO();
+			memVO = new MemVO();
+			ordSvc = new OrdService();
+			memSvc = new MemService();
+			String ord_no = jsonObject.get("ord_no").getAsString();
+			System.out.println(ord_no);
+
+			ordVO = ordSvc.getOrdByOrdno(ord_no);
+			System.out.println(ordVO.getMem_ac());
+			memVO = memSvc.findByPrimaryKeyNoImg(ordVO.getMem_ac());
+			System.out.println(memVO.getMem_ac());
+
+			outStr = gson.toJson(memVO);
+			response.setContentType(CONTENT_TYPE);
+			PrintWriter out=response.getWriter();
+			out.println(outStr);
 		}
 		
 		else{

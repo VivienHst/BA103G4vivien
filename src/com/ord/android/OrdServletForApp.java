@@ -28,6 +28,8 @@ import com.google.gson.reflect.TypeToken;
 import com.ord.model.OrdService;
 import com.ord.model.OrdVO;
 import com.ord_list.model.Ord_listVO;
+import com.prod.model.ProdService;
+import com.prod.model.ProdVO;
 import com.review.model.ReviewVO;
 import com.store.model.StoreService;
 import com.store.model.StoreVO;
@@ -47,6 +49,7 @@ public class OrdServletForApp extends HttpServlet {
 	private Set<Ord_listVO>  detailList;
 	private List<Ord_listVO>  ordDetailList;
 	private Cart_listService cart_listSvc;
+	private ProdService prodSvc;;
 	
 	
     public OrdServletForApp() {
@@ -149,7 +152,8 @@ public class OrdServletForApp extends HttpServlet {
 			getordListFromApp = gson.fromJson(Ord_listVO, setType);
 			
 			 Enumeration<String> keyset = getordListFromApp.keys();
-			    while (keyset.hasMoreElements()) {		        
+			    while (keyset.hasMoreElements()) {	
+			    	ProdVO prodVO = new ProdVO();
 					Ord_listVO ordListIt = new Ord_listVO();
 					String prodNo = keyset.nextElement();				
 					ordListIt.setProd_no(prodNo);	
@@ -157,15 +161,20 @@ public class OrdServletForApp extends HttpServlet {
 				
 					ordListIt.setAmont(getordListFromApp.get(prodNo).intValue());
 					System.out.println("prod_amont : " + getordListFromApp.get(prodNo).intValue());
+					
+					//修改商品庫存
+//					prodVO = prodSvc.getOneProd(prodNo);
+//					Integer sup = prodVO.getProd_sup() - getordListFromApp.get(prodNo).intValue();
+//					prodVO.setProd_sup(sup);
+//					prodSvc.updateProd(prodVO);
 
 					ord_listVOs.add(ordListIt);
 					
 					//刪除購物車內商品
 					cart_listSvc.deleteCart_list(prodNo, ordVO1.getMem_ac());
-					System.out.println(prodNo + " : " +ordVO1.getMem_ac());
-			        
-			    }
-			
+					
+					System.out.println(prodNo + " : " +ordVO1.getMem_ac());   
+			    }			
 			ordSvc.newAnOrder(ordVO1, ord_listVOs);
 		
 		} else{

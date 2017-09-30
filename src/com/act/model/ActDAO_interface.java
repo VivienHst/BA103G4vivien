@@ -1,6 +1,7 @@
 package com.act.model;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 
@@ -20,7 +21,20 @@ public interface ActDAO_interface {
      public Set<Act_pairVO> getAct_pairByAct_no(String ACT_NO);
      public Set<Fo_actVO> getFo_actByAct_no(String ACT_NO);
      
+     //複合查詢使用
+     public List<ActVO> getAll(Map<String, String[]> map); 
+     
+   //排序使用
+     public List<ActVO> getSort(String sort);
+     //查會員舉辦的活動
+     public List<ActVO> getAllActByMem_acNoImg(String mem_ac);   
+     //查會員參加的活動
+     public List<Act_pairVO> getAct_pairByMem_ac(String mem_ac);
+ 
+     //手機端用
      public List<ActVO> getAllNoImg();
  	 public List<byte[]> getImageByPK(String act_no);
+     public ActVO findByPrimaryKeyNoImg(String ACT_NO);
+
      
 }

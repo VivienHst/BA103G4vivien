@@ -142,10 +142,7 @@ public class ProdServletForApp extends HttpServlet {
 		else{
 			doGet(request, response);
 		}
-		
-//		response.setContentType(CONTENT_TYPE);
-//		PrintWriter out = response.getWriter();
-//		out.println(outStr);
+
 	}
 
 }

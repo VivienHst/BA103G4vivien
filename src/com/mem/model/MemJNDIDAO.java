@@ -66,7 +66,8 @@ public class MemJNDIDAO implements MemDAO_interface {
 			+ " MEM_REG_DATE "
 			+ " FROM MEM";
 	
-	private static final String GET_ONE_NO_IMG_STMT = "SELECT MEM_PWD," 
+	private static final String GET_ONE_NO_IMG_STMT = "SELECT MEM_AC,"
+			+ " MEM_PWD," 
 			+ " MEM_LNAME," 
 			+ " MEM_FNAME," 
 			+ " MEM_EMAIL," 
@@ -426,7 +427,7 @@ public class MemJNDIDAO implements MemDAO_interface {
 
 				memVO = new MemVO();
 
-				//memVO.setMem_ac(rs.getString("mem_ac"));
+				memVO.setMem_ac(rs.getString("mem_ac"));
 				memVO.setMem_pwd(rs.getString("mem_pwd"));
 				memVO.setMem_lname(rs.getString("mem_lname"));
 				memVO.setMem_fname(rs.getString("mem_fname"));
