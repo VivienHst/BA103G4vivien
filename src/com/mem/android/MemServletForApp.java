@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.beanlife.android.tool.ImageUtil;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import com.mem.model.MemService;
 import com.mem.model.MemVO;
@@ -52,7 +53,7 @@ public class MemServletForApp extends HttpServlet {
 		request.setCharacterEncoding("UTF-8");
 		memSvc = new MemService();
 		
-		Gson gson = new Gson();
+		Gson gson = new  GsonBuilder().setDateFormat("yyyy-MM-dd").create();
 		BufferedReader br = request.getReader();
 		StringBuilder jsonIn = new StringBuilder();
 		String line =  null;
@@ -65,15 +66,16 @@ public class MemServletForApp extends HttpServlet {
 		String action = jsonObject.get("action").getAsString();
 		String outStr = "";
 		System.out.println("action : " + action);
-		if(action.equals("getOneMem")){
-			String mem_ac = jsonObject.get("mem_ac").getAsString();
-			memVO = memSvc.findByPrimaryKeyNoImg(mem_ac);
-			outStr = gson.toJson(mem_ac);
-			response.setContentType(CONTENT_TYPE);
-			PrintWriter out=response.getWriter();
-			out.println(outStr);
-			
-		}else if(action.equals("getImage")){
+//		if(action.equals("getOneMem")){
+//			String mem_ac = jsonObject.get("mem_ac").getAsString();
+//			memVO = memSvc.findByPrimaryKeyNoImg(mem_ac);
+//			outStr = gson.toJson(mem_ac);
+//			response.setContentType(CONTENT_TYPE);
+//			PrintWriter out=response.getWriter();
+//			out.println(outStr);
+//			
+//		}else
+			if(action.equals("getImage")){
 			OutputStream os = response.getOutputStream();
 			String mem_ac = jsonObject.get("mem_ac").getAsString();
 			int imageSize = jsonObject.get("imageSize").getAsInt();
@@ -103,6 +105,20 @@ public class MemServletForApp extends HttpServlet {
 			response.setContentType(CONTENT_TYPE);
 			PrintWriter out=response.getWriter();
 			out.println(logInPrem);
+			
+		} else if(action.equals("getOneMem")){
+			memVO = new MemVO();
+			memSvc = new MemService();
+			String mem_ac = jsonObject.get("mem_ac").getAsString();
+			System.out.println(mem_ac);
+			memVO = memSvc.findByPrimaryKeyNoImg(mem_ac);
+			System.out.println(memVO.getMem_ac());
+
+			outStr = gson.toJson(memVO);
+			response.setContentType(CONTENT_TYPE);
+			PrintWriter out=response.getWriter();
+			out.println(outStr);
+			
 		} else if(action.equals("getMemByOrd")){
 			ordVO = new OrdVO();
 			memVO = new MemVO();

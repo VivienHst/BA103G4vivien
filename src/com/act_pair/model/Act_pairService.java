@@ -31,13 +31,19 @@ public class Act_pairService {
 		dao.update(act_pair_VO);
 		return act_pair_VO;
 	}
+	
+	public void update(Act_pairVO act_pair_VO){
+		dao.update(act_pair_VO);
+	}
+	
 	public void deleteAct_pair(String act_no,String mem_ac){
 		dao.delete(act_no,mem_ac);
 	}
-	public Act_pairVO getOneAct_pair(String act_no,String mem_ac){
 	
-	return dao.findByPrimaryKey(act_no,mem_ac);
-}
+	public Act_pairVO getOneAct_pair(String act_no, String mem_ac){
+	
+		return dao.findByPrimaryKey(act_no,mem_ac);
+	}
 	public List<Act_pairVO>getAll(){
 		return dao.getAll();
 	}

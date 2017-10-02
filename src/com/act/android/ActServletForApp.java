@@ -6,6 +6,7 @@ import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -17,6 +18,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.act.model.ActService;
 import com.act.model.ActVO;
+import com.act_pair.model.Act_pairService;
 import com.act_pair.model.Act_pairVO;
 import com.beanlife.android.tool.ImageUtil;
 import com.fo_act.model.Fo_actService;
@@ -24,6 +26,7 @@ import com.fo_act.model.Fo_actVO;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
+import com.ord_list.model.Ord_listVO;
 
 /**
  * Servlet implementation class ActServletForApp
@@ -37,10 +40,13 @@ public class ActServletForApp extends HttpServlet {
 	
 	private ActService actSvc;
 	private Fo_actService fo_actSvc;
+	private Act_pairService act_pairSvc;
 	private List<ActVO> list, actList, actHostList;
 	private List<byte[]> actImage;
 	private List<Fo_actVO> getFo_actVO;
 	private List<Act_pairVO> getPair_actVO;
+	private Set<Act_pairVO> getMem_pair_actVO;
+
 	private int foCount;
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -67,6 +73,7 @@ public class ActServletForApp extends HttpServlet {
 		String outStr = "";
 		
 		if(action.equals("getAll")){
+		//取得所有活動
 			System.out.println("get all No Img");
 			list = actSvc.getAllNoImg();
 			actList = new ArrayList<ActVO>();
@@ -82,6 +89,7 @@ public class ActServletForApp extends HttpServlet {
 			out.println(outStr);
 			
 		} else if(action.equals("getImage")){
+		//取得活動照片
 			OutputStream os = response.getOutputStream();
 			String act_no = jsonObject.get("act_no").getAsString();
 			int imageSize = jsonObject.get("imageSize").getAsInt();
@@ -97,6 +105,7 @@ public class ActServletForApp extends HttpServlet {
 			os.close();
 			
 		} else if(action.equals("getOne")){
+		//取得單一活動
 			ActVO getOneActVO = new ActVO();
 			String act_no = jsonObject.get("act_no").getAsString();
 			getOneActVO = actSvc.getOneNoImg(act_no);
@@ -108,7 +117,7 @@ public class ActServletForApp extends HttpServlet {
 			out.println(outStr);
 			
 		}else if(action.equals("getFoAct")){
-			
+		//取得收藏的活動
 			getFo_actVO = new ArrayList<Fo_actVO>();
 			fo_actSvc = new Fo_actService();
 			String mem_ac = jsonObject.get("mem_ac").getAsString();
@@ -123,7 +132,7 @@ public class ActServletForApp extends HttpServlet {
 			out.println(outStr);
 			
 		} else if(action.equals("getPartiAct")){
-			
+		//取得參加的活動
 			getPair_actVO = new ArrayList<Act_pairVO>();
 			String mem_ac = jsonObject.get("mem_ac").getAsString();
 			System.out.println(mem_ac);
@@ -137,6 +146,7 @@ public class ActServletForApp extends HttpServlet {
 			out.println(outStr);
 			
 		} else if(action.equals("getHostAct")){
+		//取得舉辦的活動
 			actHostList = new ArrayList<ActVO>();
 			String mem_ac = jsonObject.get("mem_ac").getAsString();
 			System.out.println(mem_ac);
@@ -150,6 +160,7 @@ public class ActServletForApp extends HttpServlet {
 			out.println(outStr);
 			
 		} else if(action.equals("getFoCount")){
+		//取得活動收藏數
 			actHostList = new ArrayList<ActVO>();
 			fo_actSvc = new Fo_actService();
 			String act_no = jsonObject.get("act_no").getAsString();
@@ -164,7 +175,7 @@ public class ActServletForApp extends HttpServlet {
 			out.println(outStr);
 			
 		} else if(action.equals("isFollowed")){
-			
+		//確認活動是否收藏
 			Fo_actVO isFollowed = new Fo_actVO();
 			fo_actSvc = new Fo_actService();
 			String act_no = jsonObject.get("act_no").getAsString();
@@ -180,7 +191,7 @@ public class ActServletForApp extends HttpServlet {
 			out.println(outStr);
 			
 		} else if(action.equals("addFoAct")){
-			
+		//加入收藏活動
 			Fo_actVO addFoAct = new Fo_actVO();
 			fo_actSvc = new Fo_actService();
 			String act_no = jsonObject.get("act_no").getAsString();
@@ -190,7 +201,7 @@ public class ActServletForApp extends HttpServlet {
 			addFoAct = fo_actSvc.addFo_act(mem_ac, act_no);
 
 		} else if(action.equals("deleteFoAct")){
-			
+		//取消收藏活動
 			Fo_actVO addFoAct = new Fo_actVO();
 			fo_actSvc = new Fo_actService();
 			String act_no = jsonObject.get("act_no").getAsString();
@@ -199,7 +210,60 @@ public class ActServletForApp extends HttpServlet {
 			System.out.println(act_no);
 			fo_actSvc.deleteFo_act(mem_ac, act_no);
 
+		} else if(action.equals("updateActPair")){
+		//修改活動狀態
+			act_pairSvc = new Act_pairService();
+			ActVO actVO = new ActVO();
+			Act_pairVO act_pairVO = new Act_pairVO();
+			String checkState = "false";
+			String act_no = jsonObject.get("act_no").getAsString();
+			String mem_ac = jsonObject.get("mem_ac").getAsString();
+			actVO = actSvc.getOneAct(act_no);
+			
+			act_pairVO = act_pairSvc.getOneAct_pair(act_no, mem_ac);
+			if (actVO != null){
+				checkState = act_pairVO.getChk_state();
+			}
+			if (checkState.equals("未報到")){
+				checkState = "已報到";
+				act_pairVO.setChk_state(checkState);
+				act_pairSvc.update(act_pairVO);
+			}
+			
+			System.out.println(act_pairVO);
+			
+			outStr = gson.toJson(act_pairVO);
+			System.out.println(outStr);
+			response.setContentType(CONTENT_TYPE);
+			PrintWriter out = response.getWriter();
+			out.println(outStr);
+			//public Set<Act_pairVO> getAct_pairByAct_no1(String ACT_NO){
+		
+		} else if(action.equals("getMemPair")){
+		//取得所有參加會員
+			act_pairSvc = new Act_pairService();
+			ActVO actVO = new ActVO();
+			getPair_actVO = new ArrayList<Act_pairVO>();
+			getMem_pair_actVO = new HashSet<Act_pairVO>();
+			Act_pairVO act_pairVO = new Act_pairVO();
+			String act_no = jsonObject.get("act_no").getAsString();
+			getMem_pair_actVO = actSvc.getAct_pairByAct_no1(act_no);
+			
+			Iterator<Act_pairVO> pairListIt = getMem_pair_actVO.iterator();
+			
+			while (pairListIt.hasNext()){
+				getPair_actVO.add((Act_pairVO) pairListIt.next());	
+			}
+	
+			outStr = gson.toJson(getPair_actVO);
+			System.out.println(outStr);
+			response.setContentType(CONTENT_TYPE);
+			PrintWriter out = response.getWriter();
+			out.println(outStr);
+			//public Set<Act_pairVO> getAct_pairByAct_no1(String ACT_NO){
+		
 		}
+		
 		
 		else{
 			doGet(request, response);
