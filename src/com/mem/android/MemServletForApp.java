@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintWriter;
+import java.lang.reflect.Type;
 import java.util.List;
 
 import javax.servlet.ServletException;
@@ -16,6 +17,7 @@ import com.beanlife.android.tool.ImageUtil;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
+import com.google.gson.reflect.TypeToken;
 import com.mem.model.MemService;
 import com.mem.model.MemVO;
 import com.ord.model.OrdService;
@@ -136,6 +138,18 @@ public class MemServletForApp extends HttpServlet {
 			response.setContentType(CONTENT_TYPE);
 			PrintWriter out=response.getWriter();
 			out.println(outStr);
+		} else if(action.equals("updateMem")){
+			memVO = new MemVO();
+			memSvc = new MemService();
+			String memVOString = jsonObject.get("memVO").getAsString();
+			Type listType = new TypeToken<MemVO>(){}.getType();
+			memVO = gson.fromJson(memVOString, listType);
+			mem_pic = memSvc.getImageByPK(memVO.getMem_ac());
+			memVO.setMem_pic(mem_pic);
+			System.out.println(memVO.getMem_email());
+
+			memSvc.updateMem(memVO);
+
 		}
 		
 		else{
