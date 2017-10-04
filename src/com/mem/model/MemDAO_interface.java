@@ -5,7 +5,7 @@ import java.util.List;
 
 public interface MemDAO_interface {
 	public void insert(MemVO memVO);
-	public void update(MemVO memVO);
+	public void update(MemVO memVO);	
 	public void delete(String mem_ac);
 	public MemVO findByPrimaryKey(String mem_ac);
 	public List<MemVO> getAll();
@@ -13,4 +13,6 @@ public interface MemDAO_interface {
 	public List<MemVO> getAllNoImg();
 	public MemVO findByPrimaryKeyNoImg(String mem_ac);
 	public byte[] getImageByPK(String mem_ac);
+	
+	public void update(MemVO memVO, byte[] mem_pic);
 }

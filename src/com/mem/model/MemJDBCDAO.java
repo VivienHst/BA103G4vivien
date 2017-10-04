@@ -558,6 +558,61 @@ public class MemJDBCDAO implements MemDAO_interface{
 		}
 		return memImg;
 	}
+	
+	
+	@Override
+	public void update(MemVO memVO, byte[] mem_pic) {
+		Connection con = null;
+		PreparedStatement pstmt = null;	
+		
+		try {		
+			Class.forName(driver);
+			con = DriverManager.getConnection(url, userid, passwd);
+			pstmt = con.prepareStatement(UPDATE);
+
+			pstmt.setString(1, memVO.getMem_pwd());
+			pstmt.setString(2, memVO.getMem_lname());
+			pstmt.setString(3, memVO.getMem_fname());
+			pstmt.setString(4, memVO.getMem_email());
+			pstmt.setString(5, memVO.getMem_phone());
+			pstmt.setString(6, memVO.getMem_add());
+			pstmt.setBytes(7, mem_pic);
+			pstmt.setString(8, memVO.getMem_set());
+			pstmt.setInt(9, memVO.getMem_total_pt());
+			pstmt.setInt(10, memVO.getMem_pt());
+			pstmt.setInt(11, memVO.getGrade_no());
+			pstmt.setString(12, memVO.getMem_stat());
+			pstmt.setDate(13, memVO.getMem_stat_cdate());
+			pstmt.setDate(14, memVO.getMem_reg_date());
+			pstmt.setString(15, memVO.getMem_ac());
+			
+			pstmt.executeUpdate();
+			
+		} catch (SQLException e) {
+			throw new RuntimeException("A database error occured. "
+					+ e.getMessage());
+			
+		}
+		 catch (ClassNotFoundException e) {
+				e.printStackTrace();
+		}finally{
+			if (pstmt != null) {
+				try{
+					pstmt.close();
+				} catch (SQLException se){
+					se.printStackTrace(System.err);
+				}
+			}
+			if(con != null) {
+				try {
+					con.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		
+	}
 
 
 	public static void main (String[] args) throws IOException{

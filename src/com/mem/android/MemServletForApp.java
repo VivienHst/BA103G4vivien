@@ -138,6 +138,7 @@ public class MemServletForApp extends HttpServlet {
 			response.setContentType(CONTENT_TYPE);
 			PrintWriter out=response.getWriter();
 			out.println(outStr);
+			
 		} else if(action.equals("updateMem")){
 			memVO = new MemVO();
 			memSvc = new MemService();
@@ -150,9 +151,7 @@ public class MemServletForApp extends HttpServlet {
 
 			memSvc.updateMem(memVO);
 
-		}
-		
-		else{
+		} else {
 			doGet(request, response);
 		}
 		
