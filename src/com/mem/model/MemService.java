@@ -71,6 +71,10 @@ public class MemService {
 		dao.update(memVO);
 	}
 	
+	public void updateMem(MemVO memVO, byte[] mem_pic) {
+		dao.update(memVO, mem_pic);
+	}
+	
 	public void deleteMem(String mem_ac) {
 		dao.delete(mem_ac);
 	}

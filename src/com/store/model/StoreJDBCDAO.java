@@ -47,9 +47,7 @@ public class StoreJDBCDAO implements StoreDAO_interface {
 			"STORE_STAT_CONT, " +
 			"STORE_STAT_CDATE " +
 			"FROM STORE";
-	
-	
-	
+		
 	private static final String GET_IMG_BY_PK_STMT = "SELECT STORE_PIC1,STORE_PIC2,STORE_PIC3 FROM STORE WHERE STORE_NO = ?"; 
 	private static final String GET_ONE_NO_IMG_STMT = "SELECT " +
 			"STORE_NO, " +
@@ -67,6 +65,35 @@ public class StoreJDBCDAO implements StoreDAO_interface {
 			"STORE_STAT_CONT, " +
 			"STORE_STAT_CDATE " +
 			"FROM STORE WHERE STORE_NO =?";
+	
+	private static final String GET_PROD_BY_STORE_NO_IMG = "SELECT "
+			+ "PROD_NO,"
+			+ "STORE_NO," 
+			+ "PROD_NAME," 
+			+ "BEAN_TYPE," 
+			+ "BEAN_GRADE," 
+			+ "BEAN_CONTRY," 
+			+ "BEAN_REGION," 
+			+ "BEAN_FARM," 
+			+ "BEAN_FARMER," 
+			+ "BEAN_EL," 
+			+ "PROC," 
+			+ "ROAST," 
+			+ "BEAN_ATTR_ACID," 
+			+ "BEAN_ATTR_AROMA," 
+			+ "BEAN_ATTR_BODY," 
+			+ "BEAN_ATTR_AFTER," 
+			+ "BEAN_ATTR_BAL," 
+			+ "BEAN_AROMA," 
+			+ "PROD_PRICE," 
+			+ "PROD_WT," 
+			+ "SEND_FEE," 
+			+ "PROD_SUP," 
+			+ "PROD_CONT,"
+			+ "PROD_STAT," 
+			+ "ED_TIME "
+			+ "FROM PROD WHERE STORE_NO = ? order by prod_no";
+
 	
 
 	@Override

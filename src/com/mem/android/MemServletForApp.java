@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.lang.reflect.Type;
+import java.util.Base64;
 import java.util.List;
 
 import javax.servlet.ServletException;
@@ -143,14 +144,31 @@ public class MemServletForApp extends HttpServlet {
 			memVO = new MemVO();
 			memSvc = new MemService();
 			String memVOString = jsonObject.get("memVO").getAsString();
+			String memPicString = jsonObject.get("memPic").getAsString();
+			System.out.println(memPicString);
+			mem_pic = Base64.getMimeDecoder().decode(memPicString);
+
 			Type listType = new TypeToken<MemVO>(){}.getType();
 			memVO = gson.fromJson(memVOString, listType);
-			mem_pic = memSvc.getImageByPK(memVO.getMem_ac());
-			memVO.setMem_pic(mem_pic);
+			//mem_pic = memSvc.getImageByPK(memVO.getMem_ac());
+			//memVO.setMem_pic(mem_pic);
 			System.out.println(memVO.getMem_email());
 
-			memSvc.updateMem(memVO);
+			memSvc.updateMem(memVO, mem_pic);
 
+		} else if(action.equals("getImageNoShrink")){
+			
+			memSvc = new MemService();
+			String mem_ac = jsonObject.get("mem_ac").getAsString();
+			System.out.println(mem_ac);
+			mem_pic = memSvc.getImageByPK(mem_ac);
+			String mem_picBase64 = Base64.getEncoder().encodeToString(mem_pic);
+
+			outStr = gson.toJson(mem_picBase64);
+			response.setContentType(CONTENT_TYPE);
+			PrintWriter out=response.getWriter();
+			out.println(outStr);
+			
 		} else {
 			doGet(request, response);
 		}
