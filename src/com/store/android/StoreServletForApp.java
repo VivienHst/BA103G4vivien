@@ -5,7 +5,9 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -16,6 +18,7 @@ import javax.servlet.http.HttpServletResponse;
 import com.beanlife.android.tool.ImageUtil;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
+import com.prod.model.ProdVO;
 import com.review.model.ReviewVO;
 import com.store.model.StoreService;
 import com.store.model.StoreVO;
@@ -34,6 +37,8 @@ public class StoreServletForApp extends HttpServlet {
 	private StoreVO storeVO ;
 	private List<StoreVO> StoreList;
 	private List<byte[]> StoreImage;
+	private Set<ProdVO> prodSet;
+	private List<ProdVO> prodList; 
 
     
     
@@ -100,6 +105,19 @@ public class StoreServletForApp extends HttpServlet {
 			storeVO = storeSvc.getOneStoreNoImg(storeNo);
 			System.out.println(storeVO.getStore_no());
 			outStr = gson.toJson(storeVO);
+			response.setContentType(CONTENT_TYPE);
+			PrintWriter out = response.getWriter();
+			out.println(outStr);
+			
+		} else if(action.equals("getProdByStore")){
+			prodSet = new HashSet<ProdVO>();
+			prodList = new ArrayList<ProdVO>();
+			String storeNo = jsonObject.get("store_no").getAsString();
+			prodSet = storeSvc.getProdsByStoreNoImg(storeNo);
+			for(ProdVO prodVO : prodSet){
+				prodList.add(prodVO);
+			}
+			outStr = gson.toJson(prodList);
 			response.setContentType(CONTENT_TYPE);
 			PrintWriter out = response.getWriter();
 			out.println(outStr);

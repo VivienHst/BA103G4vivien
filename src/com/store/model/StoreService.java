@@ -2,6 +2,7 @@ package com.store.model;
 
 import java.sql.Date;
 import java.util.List;
+import java.util.Set;
 
 import com.prod.model.ProdVO;
 
@@ -98,6 +99,10 @@ public class StoreService {
 	}
 	public StoreVO getOneStoreNoImg(String store_no){
 		return dao.findByPrimaryKeyNoImg(store_no);
+	}
+	
+	public Set<ProdVO> getProdsByStoreNoImg(String store_no){
+		return dao.getProdsByStore_noNoImg(store_no);
 	}
 	
 	

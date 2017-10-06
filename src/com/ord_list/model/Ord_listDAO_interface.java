@@ -3,7 +3,7 @@ package com.ord_list.model;
 import java.sql.Connection;
 import java.util.List;
 
-public interface Ord_list_interface {
+public interface Ord_listDAO_interface {
 	public void insert(Ord_listVO ord_listvo);
 	
 	public void insertByCon(Ord_listVO ord_listvo, Connection con);

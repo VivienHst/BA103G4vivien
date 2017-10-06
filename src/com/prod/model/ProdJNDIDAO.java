@@ -11,6 +11,8 @@ import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.sql.DataSource;
 
+import com.prod.query.ProdQuery;
+
 import java.sql.*;
 
 
@@ -248,6 +250,70 @@ public class ProdJNDIDAO implements ProdDAO_interface {
 	}
 	
 	@Override
+	public void updateByCon(ProdVO prodVO, Connection con) {
+		
+		PreparedStatement pstmt = null;	
+		try {
+			con = ds.getConnection();
+			pstmt = con.prepareStatement(UPDATE);
+			
+			pstmt.setString(1, prodVO.getStore_no());
+			pstmt.setString(2, prodVO.getProd_name());
+			pstmt.setString(3, prodVO.getBean_type());
+			pstmt.setString(4, prodVO.getBean_grade());
+			pstmt.setString(5, prodVO.getBean_contry());
+			pstmt.setString(6, prodVO.getBean_region());
+			pstmt.setString(7, prodVO.getBean_farm());
+			pstmt.setString(8, prodVO.getBean_farmer());
+			pstmt.setInt(9, prodVO.getBean_el());
+			pstmt.setString(10, prodVO.getProc());
+			pstmt.setString(11, prodVO.getRoast());
+			pstmt.setInt(12, prodVO.getBean_attr_acid());
+			pstmt.setInt(13, prodVO.getBean_attr_aroma());
+			pstmt.setInt(14, prodVO.getBean_attr_body());
+			pstmt.setInt(15, prodVO.getBean_attr_after());
+			pstmt.setInt(16, prodVO.getBean_attr_bal());
+			pstmt.setString(17, prodVO.getBean_aroma());
+			pstmt.setInt(18, prodVO.getProd_price());
+			pstmt.setDouble(19, prodVO.getProd_wt());
+			pstmt.setInt(20, prodVO.getSend_fee());
+			pstmt.setInt(21, prodVO.getProd_sup());
+			pstmt.setString(22, prodVO.getProd_cont());
+			pstmt.setBytes(23, prodVO.getProd_pic1());
+			pstmt.setBytes(24, prodVO.getProd_pic2());
+			pstmt.setBytes(25, prodVO.getProd_pic3());
+			pstmt.setString(26, prodVO.getProd_stat());
+			pstmt.setDate(27, prodVO.getEd_time());
+			pstmt.setString(28, prodVO.getProd_no());
+			
+			pstmt.executeUpdate();
+			
+		} catch (SQLException e) {
+			if (con != null) {
+				try {
+					// 3●設定於當有exception發生時之catch區塊內
+					System.err.print("Transaction is being ");
+					System.err.println("rolled back-由-prod");
+					con.rollback();
+				} catch (SQLException excep) {
+					throw new RuntimeException("rollback error occured. "
+							+ excep.getMessage());
+				}
+			}
+			throw new RuntimeException("A database error occured. "
+					+ e.getMessage());	
+		} finally{
+			if (pstmt != null) {
+				try{
+					pstmt.close();
+				} catch (SQLException se){
+					se.printStackTrace(System.err);
+				}
+			}
+		}
+	}
+	
+	@Override
 	public void delete(String prod_no) {
 		Connection con = null;
 		PreparedStatement pstmt = null;
@@ -380,6 +446,93 @@ public class ProdJNDIDAO implements ProdDAO_interface {
 		try {
 			con = ds.getConnection();
 			pstmt = con.prepareStatement(GET_ALL_STMT);
+			rs = pstmt.executeQuery();
+			
+			while (rs.next()){
+				prodVO = new ProdVO();
+				prodVO.setProd_no(rs.getString("prod_no"));
+				prodVO.setStore_no(rs.getString("store_no"));
+				prodVO.setProd_name(rs.getString("prod_name"));
+				prodVO.setBean_type(rs.getString("bean_type"));
+				prodVO.setBean_grade(rs.getString("bean_grade"));
+				prodVO.setBean_contry(rs.getString("bean_contry"));
+				prodVO.setBean_region(rs.getString("bean_region"));
+				prodVO.setBean_farm(rs.getString("bean_farm"));
+				prodVO.setBean_farmer(rs.getString("bean_farmer"));
+				prodVO.setBean_el(rs.getInt("bean_el"));
+				prodVO.setProc(rs.getString("proc"));
+				prodVO.setRoast(rs.getString("roast"));
+				prodVO.setBean_attr_acid(rs.getInt("bean_attr_acid"));
+				prodVO.setBean_attr_aroma(rs.getInt("bean_attr_aroma"));
+				prodVO.setBean_attr_body(rs.getInt("bean_attr_body"));
+				prodVO.setBean_attr_after(rs.getInt("bean_attr_after"));
+				prodVO.setBean_attr_bal(rs.getInt("bean_attr_bal"));
+				prodVO.setBean_aroma(rs.getString("Bean_aroma"));
+				prodVO.setProd_price(rs.getInt("prod_price"));
+				prodVO.setProd_wt(rs.getDouble("prod_wt"));
+				prodVO.setSend_fee(rs.getInt("send_fee"));
+				prodVO.setProd_sup(rs.getInt("prod_sup"));
+				prodVO.setProd_cont(rs.getString("prod_cont"));
+				prodVO.setProd_pic1(rs.getBytes("prod_pic1"));
+				prodVO.setProd_pic2(rs.getBytes("prod_pic2"));
+				prodVO.setProd_pic3(rs.getBytes("prod_pic3"));
+				prodVO.setProd_stat(rs.getString("prod_stat"));
+				prodVO.setEd_time(rs.getDate("ed_time"));
+				list.add(prodVO);
+			}
+			
+		} catch (SQLException se) {
+			throw new RuntimeException("A database error occured. "
+					+ se.getMessage());
+		} finally {
+			if (rs != null) {
+				try {
+					rs.close();
+				} catch (SQLException se) {
+					se.printStackTrace(System.err);
+				}
+			}
+			if (pstmt != null) {
+				try {
+					pstmt.close();
+				} catch (SQLException se) {
+					se.printStackTrace(System.err);
+				}
+			}
+			if (con != null) {
+				try {
+					con.close();
+				} catch (Exception e) {
+					e.printStackTrace(System.err);
+				}
+			}
+		}
+		return list;
+	}
+	
+	@Override
+	public List<ProdVO> getAll(Map<String, String[]> map, Map<String, String[]> map2) {
+		List<ProdVO> list = new ArrayList<ProdVO>();
+		ProdVO prodVO = null;
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		
+
+		try {
+			con = ds.getConnection();
+			
+
+			String str1 = (ProdQuery.get_WhereCondition(map).trim().length()==0)?"where (":"and (";
+			String finalSQL = "select * from prod "
+					          + ProdQuery.get_WhereCondition(map)
+					          + str1
+					          + ProdQuery.get_ElseCondition(map2)
+					          + ")"
+					          + "order by prod_no desc";
+			System.out.println(finalSQL);
+			
+			pstmt = con.prepareStatement(finalSQL);
 			rs = pstmt.executeQuery();
 			
 			while (rs.next()){

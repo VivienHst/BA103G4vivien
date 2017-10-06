@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.lang.reflect.Type;
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.HashSet;
@@ -150,6 +151,11 @@ public class OrdServletForApp extends HttpServlet {
 			Type setType = new TypeToken<Hashtable<String,Integer>>(){}.getType();
 			ordVO1 = gson.fromJson(ordVOFromApp, ordVOType);
 			getordListFromApp = gson.fromJson(Ord_listVO, setType);
+			ordVO1.setOrd_date(new Date(System.currentTimeMillis()));
+			if(ordVO1.getOrd_stat().equals("已付款")){
+				ordVO1.setPay_date(new Date(System.currentTimeMillis()));
+			}
+			
 			
 			 Enumeration<String> keyset = getordListFromApp.keys();
 			    while (keyset.hasMoreElements()) {	

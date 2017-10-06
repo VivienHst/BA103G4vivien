@@ -11,9 +11,9 @@ public class AdService {
 	}
 	
 	
-	public AdVO addAd(String ad_no,String prod_no,String ad_title,byte[] ad_img,Date ad_op_date,Date ad_ed_date){
+	public AdVO addAd(String prod_no,String ad_title,byte[] ad_img,Date ad_op_date,Date ad_ed_date){
 		AdVO ad_VO=new AdVO();
-		ad_VO.setAd_no(ad_no);
+	
 		ad_VO.setProd_no(prod_no);
 		ad_VO.setAd_title(ad_title);
 		ad_VO.setAd_img(ad_img);

@@ -309,34 +309,34 @@ public class AdJDBCDAO implements AdDAO_interface{
 		// TODO Auto-generated method stub
 		AdJDBCDAO dao=new AdJDBCDAO();
 		
-		AdVO ad_vo1=new AdVO();
-		ad_vo1.setProd_no("P1000000003");
-		ad_vo1.setAd_title("跳樓大拍賣");
-		byte[] pic1=getByteArray("C:\\Users\\Java\\Desktop\\專題照片\\coffee bean.jpg");
-		ad_vo1.setAd_img(pic1);
-		ad_vo1.setAd_op_date(java.sql.Date.valueOf("2017-09-05"));
-		ad_vo1.setAd_ed_date(java.sql.Date.valueOf("2017-09-07"));
-		dao.insert(ad_vo1);
-		
-		AdVO ad_vo2=new AdVO();
-		ad_vo2.setAd_no("D1000000004");
-		ad_vo2.setProd_no("P1000000003");
-		ad_vo2.setAd_title("跳樓");
-		byte[] pic2=getByteArray("C:\\Users\\Java\\Desktop\\專題照片\\coffee bean.jpg");
-		ad_vo2.setAd_img(pic2);
-		ad_vo2.setAd_op_date(java.sql.Date.valueOf("2017-09-15"));
-		ad_vo2.setAd_ed_date(java.sql.Date.valueOf("2017-09-17"));
-		dao.update(ad_vo2);
-		
-		dao.delete("D1000000004");
-		
-		AdVO ad_vo3=dao.findByPrimaryKey("D1000000003");
-		System.out.println(ad_vo3.getAd_no());
-		System.out.println(ad_vo3.getProd_no());
-		System.out.println(ad_vo3.getAd_title());
-		System.out.println(ad_vo3.getAd_img());
-		System.out.println(ad_vo3.getAd_op_date());
-		System.out.println(ad_vo3.getAd_ed_date());
+//		AdVO ad_vo1=new AdVO();
+//		ad_vo1.setProd_no("P1000000003");
+//		ad_vo1.setAd_title("跳樓大拍賣");
+//		byte[] pic1=getByteArray("C:\\Users\\Java\\Desktop\\專題照片\\coffee bean.jpg");
+//		ad_vo1.setAd_img(pic1);
+//		ad_vo1.setAd_op_date(java.sql.Date.valueOf("2017-09-05"));
+//		ad_vo1.setAd_ed_date(java.sql.Date.valueOf("2017-09-07"));
+//		dao.insert(ad_vo1);
+//		
+//		AdVO ad_vo2=new AdVO();
+//		ad_vo2.setAd_no("D1000000004");
+//		ad_vo2.setProd_no("P1000000003");
+//		ad_vo2.setAd_title("跳樓");
+//		byte[] pic2=getByteArray("C:\\Users\\Java\\Desktop\\專題照片\\coffee bean.jpg");
+//		ad_vo2.setAd_img(pic2);
+//		ad_vo2.setAd_op_date(java.sql.Date.valueOf("2017-09-15"));
+//		ad_vo2.setAd_ed_date(java.sql.Date.valueOf("2017-09-17"));
+//		dao.update(ad_vo2);
+//		
+//		dao.delete("D1000000004");
+//		
+//		AdVO ad_vo3=dao.findByPrimaryKey("D1000000003");
+//		System.out.println(ad_vo3.getAd_no());
+//		System.out.println(ad_vo3.getProd_no());
+//		System.out.println(ad_vo3.getAd_title());
+//		System.out.println(ad_vo3.getAd_img());
+//		System.out.println(ad_vo3.getAd_op_date());
+//		System.out.println(ad_vo3.getAd_ed_date());
 		
 		
 		

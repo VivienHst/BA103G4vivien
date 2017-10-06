@@ -5,7 +5,11 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -127,7 +131,7 @@ public class ProdServletForApp extends HttpServlet {
 			PrintWriter out = response.getWriter();
 			out.println(outStr);
 			
-		}else if(action.equals("getScore")){
+		} else if(action.equals("getScore")){
 			revSvc = new ReviewService();
 			String prod_no = jsonObject.get("prod_no").getAsString();
 			System.out.println(prod_no);
@@ -137,8 +141,34 @@ public class ProdServletForApp extends HttpServlet {
 			response.setContentType(CONTENT_TYPE);
 			PrintWriter out=response.getWriter();
 			out.println(outStr);
+		} else if(action.equals("getHotProd")){
+			Set<ProdVO> prodVO1 = new HashSet<ProdVO>();
+			List<ProdVO> hotProdList = new ArrayList<ProdVO>();
+			prodVO1 = (Set<ProdVO>) getServletContext().getAttribute("hotProdVOs");
+			
+			System.out.println(prodVO1.toString());
+			
+//			Iterator prodIt = prodVO1.iterator();
+//			while (prodIt.hasNext()){
+//				hotProdList.add((ProdVO) prodIt.next());
+//			}
+			
+			for(ProdVO prodVO : prodVO1){
+				prodVO.setProd_pic1(null);
+				prodVO.setProd_pic2(null);
+				prodVO.setProd_pic3(null);
+				hotProdList.add(prodVO);
+			}
+			
+
+			//System.out.println(prodVO.toString());
+			outStr = gson.toJson(hotProdList);
+			response.setContentType(CONTENT_TYPE);
+			PrintWriter out=response.getWriter();
+			out.println(outStr);
 		}
-		
+		//			Set<ProdVO> prodVO = request.getSession().getAttribute("hotProds");
+		// 請求session中的熱門商品
 		else{
 			doGet(request, response);
 		}
