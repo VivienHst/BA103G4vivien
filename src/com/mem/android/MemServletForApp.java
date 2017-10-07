@@ -6,7 +6,9 @@ import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.lang.reflect.Type;
 import java.util.Base64;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -21,6 +23,8 @@ import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
 import com.mem.model.MemService;
 import com.mem.model.MemVO;
+import com.mem_grade.model.Mem_gradeService;
+import com.mem_grade.model.Mem_gradeVO;
 import com.ord.model.OrdService;
 import com.ord.model.OrdVO;
 
@@ -41,7 +45,8 @@ public class MemServletForApp extends HttpServlet {
     private boolean logInPrem;
 	private OrdService ordSvc;
 	private OrdVO ordVO;
-
+	private Mem_gradeService mem_gradeSvc;
+	private Mem_gradeVO mem_gradeVO;
     
 
     public MemServletForApp() {
@@ -127,15 +132,28 @@ public class MemServletForApp extends HttpServlet {
 			memVO = new MemVO();
 			ordSvc = new OrdService();
 			memSvc = new MemService();
+			mem_gradeSvc = new Mem_gradeService();
+					
+						
 			String ord_no = jsonObject.get("ord_no").getAsString();
 			System.out.println(ord_no);
 
 			ordVO = ordSvc.getOrdByOrdno(ord_no);
 			System.out.println(ordVO.getMem_ac());
+			Map<String, Object> memGradeMap = new HashMap<String, Object>();
 			memVO = memSvc.findByPrimaryKeyNoImg(ordVO.getMem_ac());
+			String garde_title = mem_gradeSvc.getOneMem_grade(memVO.getGrade_no()).getGrade_title();
+
+
+		
+			memGradeMap.put("memVO", memVO);
+			memGradeMap.put("gradeTitle", garde_title);
+
+			outStr = gson.toJson(memGradeMap);
+			
 			System.out.println(memVO.getMem_ac());
 
-			outStr = gson.toJson(memVO);
+			//outStr = gson.toJson(memVO);
 			response.setContentType(CONTENT_TYPE);
 			PrintWriter out=response.getWriter();
 			out.println(outStr);
@@ -165,6 +183,25 @@ public class MemServletForApp extends HttpServlet {
 			String mem_picBase64 = Base64.getEncoder().encodeToString(mem_pic);
 
 			outStr = gson.toJson(mem_picBase64);
+			response.setContentType(CONTENT_TYPE);
+			PrintWriter out=response.getWriter();
+			out.println(outStr);
+		 	
+		} else if(action.equals("getMemWithGrade")){
+			mem_gradeSvc = new Mem_gradeService();
+			mem_gradeVO = new Mem_gradeVO();		
+			memVO = new MemVO();
+			memSvc = new MemService();
+			String mem_ac = jsonObject.get("mem_ac").getAsString();
+			System.out.println(mem_ac);
+			memVO = memSvc.findByPrimaryKeyNoImg(mem_ac);
+			System.out.println(memVO.getMem_ac());
+			String garde_title = mem_gradeSvc.getOneMem_grade(memVO.getGrade_no()).getGrade_title();
+			Map<String, Object> memGradeMap = new HashMap<String, Object>();
+			memGradeMap.put("memVO", memVO);
+			memGradeMap.put("gradeTitle", garde_title);
+
+			outStr = gson.toJson(memGradeMap);
 			response.setContentType(CONTENT_TYPE);
 			PrintWriter out=response.getWriter();
 			out.println(outStr);

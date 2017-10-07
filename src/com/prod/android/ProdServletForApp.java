@@ -11,6 +11,7 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -141,17 +142,13 @@ public class ProdServletForApp extends HttpServlet {
 			response.setContentType(CONTENT_TYPE);
 			PrintWriter out=response.getWriter();
 			out.println(outStr);
+			
 		} else if(action.equals("getHotProd")){
 			Set<ProdVO> prodVO1 = new HashSet<ProdVO>();
 			List<ProdVO> hotProdList = new ArrayList<ProdVO>();
 			prodVO1 = (Set<ProdVO>) getServletContext().getAttribute("hotProdVOs");
 			
 			System.out.println(prodVO1.toString());
-			
-//			Iterator prodIt = prodVO1.iterator();
-//			while (prodIt.hasNext()){
-//				hotProdList.add((ProdVO) prodIt.next());
-//			}
 			
 			for(ProdVO prodVO : prodVO1){
 				prodVO.setProd_pic1(null);
@@ -160,9 +157,25 @@ public class ProdServletForApp extends HttpServlet {
 				hotProdList.add(prodVO);
 			}
 			
-
-			//System.out.println(prodVO.toString());
 			outStr = gson.toJson(hotProdList);
+			response.setContentType(CONTENT_TYPE);
+			PrintWriter out=response.getWriter();
+			out.println(outStr);
+			
+		} else if(action.equals("getProdAtr")){
+			
+			/*
+			 * Set<String> countrys = setCountrys();
+				ServletContext context = getServletContext();
+		    	context.setAttribute("countrys", countrys);
+			 */
+			Set<String> prodCon = new HashSet<String>();
+			List<ProdVO> hotProdList = new ArrayList<ProdVO>();
+			prodCon = (Set<String>) getServletContext().getAttribute("countrys");
+			
+			System.out.println(prodCon);
+
+			outStr = gson.toJson(prodCon);
 			response.setContentType(CONTENT_TYPE);
 			PrintWriter out=response.getWriter();
 			out.println(outStr);
