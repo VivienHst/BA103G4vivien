@@ -445,7 +445,9 @@ public class AdJDBCDAO implements AdDAO_interface{
 
 			rs = pstmt.executeQuery();
 			
-			img = rs.getBytes("AD_IMG");
+			while (rs.next()){
+				img = rs.getBytes("AD_IMG");
+			}
 
 
 		} catch (SQLException e) {

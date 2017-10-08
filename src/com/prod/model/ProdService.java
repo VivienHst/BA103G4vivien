@@ -124,6 +124,16 @@ public class ProdService {
 		return dao.getAllNoImg();
 
 	}
+	
+	public List<ProdVO> getNew() {
+		return dao.getNew();
+	}
+
+
+	public List<ProdVO> getNewNoImg() {
+		return dao.getNewNoImg();
+
+	}
 
 	public List<byte[]> getImageByPK(String prod_no) {
 		return dao.getImageByPK(prod_no);

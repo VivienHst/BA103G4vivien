@@ -179,6 +179,17 @@ public class ProdServletForApp extends HttpServlet {
 			response.setContentType(CONTENT_TYPE);
 			PrintWriter out=response.getWriter();
 			out.println(outStr);
+		} else if(action.equals("getNewProd")){
+			list = prodSvc.getNewNoImg();
+			prodList = new ArrayList<ProdVO>();
+			for(ProdVO list : list){
+				prodList.add(list);
+			}
+			outStr = gson.toJson(list);
+			response.setContentType(CONTENT_TYPE);
+			PrintWriter out = response.getWriter();
+			out.println(outStr);
+			
 		}
 		//			Set<ProdVO> prodVO = request.getSession().getAttribute("hotProds");
 		// 請求session中的熱門商品

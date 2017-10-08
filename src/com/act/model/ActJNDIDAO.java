@@ -57,7 +57,9 @@ public class ActJNDIDAO implements ActDAO_interface{
 	private static final String GET_ACT_COMM_ByAct_no_STMT="SELECT * FROM ACT_COMM WHERE ACT_NO=? ORDER BY ACT_NO";
 	private static final String GET_ACT_PAIR_ByAct_no_STMT="SELECT * FROM ACT_PAIR WHERE ACT_NO=? ORDER BY ACT_NO";
 	private static final String GET_FO_ACT_ByAct_no_STMT="SELECT * FROM FO_ACT WHERE ACT_NO=? ORDER BY ACT_NO";
-	
+	private static final String FIND_MEM_COUNT_BY_ACT_NO="SELECT MEM_COUNT FROM ACT WHERE ACT_NO=?";
+	private static final String ADD_ONE_TO_MEM_COUNT="update act set MEM_COUNT=? where act_no=?";
+	 
 	private static final String GET_ALL_NO_IMG_STMT = "SELECT "
 			+ "ACT_NO,"
 			+ "MEM_AC,"
@@ -1020,6 +1022,61 @@ public class ActJNDIDAO implements ActDAO_interface{
 			}
 		}
 		return list;	
+	}
+	
+	@Override
+	public void update_mem_count(String ACT_NO,Integer number) {
+		// TODO Auto-generated method stub
+	
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		PreparedStatement pstmt2 = null;
+		ResultSet rs = null;
+		Integer mem_count=null;
+		try {
+				con = ds.getConnection();
+				pstmt=con.prepareStatement(FIND_MEM_COUNT_BY_ACT_NO);
+				pstmt.setString(1, ACT_NO);
+				rs=pstmt.executeQuery();
+				while(rs.next()){
+					mem_count=rs.getInt("MEM_COUNT");
+				}
+				pstmt2=con.prepareStatement(ADD_ONE_TO_MEM_COUNT);
+				pstmt2.setInt(1,mem_count+number);
+			
+				pstmt2.setString(2, ACT_NO);
+				pstmt2.executeUpdate();
+				
+				
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			
+		} finally {
+			if (pstmt != null) {
+				try {
+					pstmt.close();
+				} catch (SQLException se) {
+					se.printStackTrace(System.err);
+				}
+			}
+			if (pstmt2 != null) {
+				try {
+					pstmt2.close();
+				} catch (SQLException se) {
+					se.printStackTrace(System.err);
+				}
+			}
+			if (con != null) {
+				try {
+					con.close();
+				} catch (Exception e) {
+					e.printStackTrace(System.err);
+				}
+			}
+		}
+		
+		
 	}
 	
 	@Override

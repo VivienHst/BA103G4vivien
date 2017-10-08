@@ -5,9 +5,11 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import javax.servlet.ServletException;
@@ -116,7 +118,33 @@ public class ActServletForApp extends HttpServlet {
 			PrintWriter out = response.getWriter();
 			out.println(outStr);
 			
-		}else if(action.equals("getFoAct")){
+		} else if(action.equals("getAllAct")){
+		//取得可以參加的活動
+			ActVO getAllActVO = new ActVO();
+			String act_stat = jsonObject.get("act_stat").getAsString();
+			Map<String, String[]> getActPara = new HashMap<String, String[]>();
+			System.out.println("-----------------------"+act_stat);
+
+			getActPara.put("act_stat", new String[] { act_stat });
+			
+			//getAllActVO = actSvc.getAll(getActPara);
+			list = actSvc.getAll(getActPara);
+			actList = new ArrayList<ActVO>();
+			for(ActVO list : list){
+				System.out.println(list.getAct_op_date());
+				list.setAct_pic1(null);
+				list.setAct_pic2(null);
+				list.setAct_pic3(null);
+				
+				actList.add(list);
+			}
+			outStr = gson.toJson(list);
+			System.out.println(outStr);
+			response.setContentType(CONTENT_TYPE);
+			PrintWriter out = response.getWriter();
+			out.println(outStr);
+			
+		} else if(action.equals("getFoAct")){
 		//取得收藏的活動
 			getFo_actVO = new ArrayList<Fo_actVO>();
 			fo_actSvc = new Fo_actService();

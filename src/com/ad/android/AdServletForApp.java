@@ -70,13 +70,14 @@ private final static String CONTENT_TYPE = "text/html; charset=UTF-8";
 
 			adList = new ArrayList<AdVO>();
 			adList = adSvc.getNowAdNoImg();
+			System.out.println("getAd");
 
 			outStr = gson.toJson(adList);
 			response.setContentType(CONTENT_TYPE);
 			PrintWriter out = response.getWriter();
 			out.println(outStr);
 			
-		} else if(action.equals("getNowAdImg")){
+		} else if(action.equals("getImage")){
 			OutputStream os = response.getOutputStream();
 			String ad_no = jsonObject.get("ad_no").getAsString();
 			int imageSize = jsonObject.get("imageSize").getAsInt();

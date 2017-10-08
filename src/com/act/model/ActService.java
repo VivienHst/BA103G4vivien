@@ -116,6 +116,17 @@ public class ActService {
 		
 	}
 	
+	//參與人數增加時加1使用
+	public void  update_mem_count(String act_no){
+		 dao.update_mem_count(act_no,1);
+		
+	}
+	//參與人數增加時減1使用
+	public void  reduce_mem_count(String act_no){
+		 dao.update_mem_count(act_no,-1);
+		
+	}
+	
 	public List<ActVO> getSort(String sort){
 		return dao.getSort(sort);
 		

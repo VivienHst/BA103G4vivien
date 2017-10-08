@@ -21,7 +21,9 @@ public class jdbcUtil_CompositeQuery_act {
 		else if ("act_op_date".equals(columnName))                          // 用於Oracle的date
 			aCondition = "  to_char(act_op_date ,'yyyy-mm-dd')   >    '"+  value + "'";              
 		else if ("act_ed_date".equals(columnName))
-				aCondition = " to_char(act_ed_date ,'yyyy-mm-dd')   <   '"+  value +"'";  	
+				aCondition = " to_char(act_ed_date ,'yyyy-mm-dd')   <   '"+  value +"'";
+		else if ("act_stat".equals(columnName))
+			aCondition = columnName + " =  '" +  value + "'";
 		return aCondition + " ";
 	}
 

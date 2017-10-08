@@ -35,7 +35,7 @@ public class AdJNDIDAO implements AdDAO_interface{
 	private static final String DELETE = "delete from ad where ad_no=?";
 	private static final String UPDATE ="update ad set PROD_NO=?,AD_TITLE=?,AD_IMG=?,AD_OP_DATE=?,AD_ED_DATE=? where AD_NO=?";
 	private static final String GET_NOW_AD_STMT ="select * from ad where sysdate between  ad_op_date and  ad_ed_date ";
-	private static final String GET_NOW_AD_NO_IMG_STMT ="select PROD_NO,AD_TITLE,AD_OP_DATE,AD_ED_DATE from AD where sysdate between  AD_OP_DATE and  AD_ED_DATE ";
+	private static final String GET_NOW_AD_NO_IMG_STMT ="select AD_NO, PROD_NO,AD_TITLE,AD_OP_DATE,AD_ED_DATE from AD where sysdate between  AD_OP_DATE and  AD_ED_DATE ";
 	private static final String GET_NOW_AD_IMG_STMT ="select AD_IMG from AD where AD_NO =? ";
 
 	
@@ -401,10 +401,11 @@ public class AdJNDIDAO implements AdDAO_interface{
 			con = ds.getConnection();
 			pstmt = con.prepareStatement(GET_NOW_AD_IMG_STMT);
 			pstmt.setString(1, ad_no);
-
+				
 			rs = pstmt.executeQuery();
-			
-			img = rs.getBytes("AD_IMG");
+			while (rs.next()){
+				img = rs.getBytes("AD_IMG");
+			}
 
 
 		} catch (SQLException e) {
