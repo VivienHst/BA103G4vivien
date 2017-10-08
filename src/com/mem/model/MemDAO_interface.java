@@ -15,4 +15,6 @@ public interface MemDAO_interface {
 	public byte[] getImageByPK(String mem_ac);
 	
 	public void update(MemVO memVO, byte[] mem_pic);
+	public void insert(MemVO memVO, byte[] mem_pic);
+
 }

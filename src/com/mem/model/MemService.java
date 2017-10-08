@@ -40,6 +40,10 @@ public class MemService {
 		dao.insert(memVO);
 	}
 	
+	public void addMem(MemVO memVO, byte[] mem_pic) {
+		dao.insert(memVO, mem_pic);
+	}
+	
 	public MemVO updateMem(String mem_ac, String mem_pwd, String mem_lname,
 			String mem_fname, String mem_email, String mem_phone, String mem_add,
 			byte[] mem_pic, String mem_set, Integer mem_total_pt, Integer mem_pt,
