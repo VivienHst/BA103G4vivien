@@ -70,7 +70,7 @@ private final static String CONTENT_TYPE = "text/html; charset=UTF-8";
 
 			adList = new ArrayList<AdVO>();
 			adList = adSvc.getNowAdNoImg();
-			System.out.println("getAd");
+			System.out.println("getAd" + adList.toString());
 
 			outStr = gson.toJson(adList);
 			response.setContentType(CONTENT_TYPE);
