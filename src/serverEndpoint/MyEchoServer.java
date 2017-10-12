@@ -1,19 +1,27 @@
 package serverEndpoint;
-import java.io.*;
-import java.util.*;
 
+import java.io.IOException;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
+
+import javax.websocket.CloseReason;
+import javax.websocket.OnClose;
+import javax.websocket.OnError;
+import javax.websocket.OnMessage;
+import javax.websocket.OnOpen;
+import javax.websocket.Session;
 import javax.websocket.server.PathParam;
 import javax.websocket.server.ServerEndpoint;
-import javax.websocket.Session;
-import javax.websocket.OnOpen;
-import javax.websocket.OnMessage;
-import javax.websocket.OnError;
-import javax.websocket.OnClose;
-import javax.websocket.CloseReason;
+
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+import com.msg.model.MsgService;
 
 @ServerEndpoint("/MyEchoServer/{myName}/{urName}")
 public class MyEchoServer {
-
 private static final Map<Set<String>,  Set<Session>> pairSessions = Collections.synchronizedMap(new HashMap<Set<String>, Set<Session>>());
 	
 	@OnOpen
@@ -40,10 +48,10 @@ private static final Map<Set<String>,  Set<Session>> pairSessions = Collections.
 			pairSessions.put(pairSet, setSessions);
 		}
 	
-		System.out.println(userSession.getId() + ": §w≥sΩu");
+		System.out.println(userSession.getId() + ": Â∑≤ÈÄ£Á∑ö");
 		System.out.println(myName + ": myName");
 		System.out.println(urName + ": urName");
-//		userSession.getBasicRemote().sendText("WebSocket ≥sΩu¶®•\");
+//		userSession.getBasicRemote().sendText("WebSocket ÈÄ£Á∑öÊàêÂäü");
 	}
 
 	
@@ -57,6 +65,13 @@ private static final Map<Set<String>,  Set<Session>> pairSessions = Collections.
 		for (Session session: pairSessions.get(pairSet)){
 			if (session.isOpen())
 				session.getAsyncRemote().sendText(message);
+			
+			Gson gson = new Gson();
+			JsonObject jsonObject = gson.fromJson(message, JsonObject.class);
+			String msg_cont = jsonObject.get("message").getAsString();
+			
+			MsgService msgSvc = new MsgService();
+			msgSvc.addMsgVO(myName, urName, msg_cont);
 		}
 		
 		System.out.println(pairSet+ "Message received: " + message);
@@ -81,6 +96,4 @@ private static final Map<Set<String>,  Set<Session>> pairSessions = Collections.
 		
 		System.out.println(userSession.getId() + pairSet+ ": Disconnected: " + Integer.toString(reason.getCloseCode().getCode()));
 	}
-
- 
 }

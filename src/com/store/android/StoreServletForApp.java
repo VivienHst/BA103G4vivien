@@ -6,6 +6,7 @@ import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -18,6 +19,10 @@ import javax.servlet.http.HttpServletResponse;
 import com.beanlife.android.tool.ImageUtil;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
+import com.ord.model.OrdService;
+import com.ord.model.OrdVO;
+import com.ord_list.model.Ord_listVO;
+import com.prod.model.ProdService;
 import com.prod.model.ProdVO;
 import com.review.model.ReviewVO;
 import com.store.model.StoreService;
@@ -39,6 +44,8 @@ public class StoreServletForApp extends HttpServlet {
 	private List<byte[]> StoreImage;
 	private Set<ProdVO> prodSet;
 	private List<ProdVO> prodList; 
+	private OrdService ordSvc;
+	private ProdService prodSvc;
 
     
     
@@ -118,6 +125,27 @@ public class StoreServletForApp extends HttpServlet {
 				prodList.add(prodVO);
 			}
 			outStr = gson.toJson(prodList);
+			response.setContentType(CONTENT_TYPE);
+			PrintWriter out = response.getWriter();
+			out.println(outStr);
+			
+		} else if(action.equals("getStoreByOrd")){
+			ordSvc = new OrdService();
+			prodSvc= new ProdService();
+			storeSvc = new StoreService();
+			String ord_no = jsonObject.get("ord_no").getAsString();
+			
+			Set<Ord_listVO> set =new HashSet<Ord_listVO>();
+			set = ordSvc.getOrd_listByOrd(ord_no);
+			List<Ord_listVO> ordList = new ArrayList<Ord_listVO>();
+			Iterator<Ord_listVO> it = set.iterator();
+			while (it.hasNext()){
+				ordList.add(it.next());
+			}
+
+			StoreVO storeVO = storeSvc.getOneStoreNoImg(prodSvc.getOneProd(ordList.get(0).getProd_no()).getStore_no());
+
+			outStr = gson.toJson(storeVO);
 			response.setContentType(CONTENT_TYPE);
 			PrintWriter out = response.getWriter();
 			out.println(outStr);
