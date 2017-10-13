@@ -6,6 +6,7 @@ import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
@@ -76,18 +77,21 @@ public class MsgServletForApp extends HttpServlet {
 			PrintWriter out = response.getWriter();
 			out.println(outStr);
 			
-		}
-		if(action.equals("getAllPairByMem")){
+		} else if(action.equals("getAllPairByMem")){
 			msgStringSet = new LinkedHashSet<String>();
 			String mem_ac = jsonObject.get("mem_ac").getAsString();
 			msgStringSet = msgSvc.getAllPairByMem(mem_ac);
-			
-			outStr = gson.toJson(msgStringSet);
+			Iterator it = msgStringSet.iterator();
+			List<String> memList = new ArrayList<String>();
+			while(it.hasNext()){
+				memList.add((String) it.next());
+			}
+			System.out.println(memList.toString());
+			outStr = gson.toJson(memList);
 			response.setContentType(CONTENT_TYPE);
 			PrintWriter out = response.getWriter();
 			out.println(outStr);			
-		}
-		else{
+		} else{
 			doGet(request, response);
 		}
 
