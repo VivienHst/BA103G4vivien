@@ -62,7 +62,7 @@ public class ProdDAO implements ProdDAO_interface {
 			+ "WHERE PROD_NO =?";
 	
 	private static final String DELETE = "DELETE FROM PROD WHERE PROD_NO = ?";
-	private static final String GET_ALL_STMT = "SELECT * FROM PROD";
+	private static final String GET_ALL_STMT = "SELECT * FROM PROD order by prod_no desc";
 	private static final String GET_ONE_STMT = "SELECT * FROM PROD WHERE PROD_NO = ?";
 	
 	private static final String GET_NEW5_STMT = "SELECT * FROM PROD WHERE PROD_STAT = '上架' AND ROWNUM <= 5 ORDER BY ED_TIME DESC";
@@ -122,10 +122,10 @@ public class ProdDAO implements ProdDAO_interface {
 			+ "PROD_CONT,"
 			+ "PROD_STAT," 
 			+ "ED_TIME "
-			+ "FROM PROD WHERE PROD_STAT = '上架' AND ROWNUM <= 5 ORDER BY ED_TIME DESC";
+			+ "FROM PROD WHERE PROD_STAT='上架' AND ROWNUM <= 5 ORDER BY ED_TIME DESC";
 	
 	private static final String GET_IMG_BY_PK_STMT = "SELECT PROD_PIC1,PROD_PIC2,PROD_PIC3 FROM PROD WHERE PROD_NO = ?"; 
-	private static final String GET_QUERY_RESULT = "SELECT * FROM PROD WHERE BEAN_CONTRY LIKE ? AND PROC LIKE ? AND ROAST LIKE ? AND PROD_NAME LIKE ?";
+	private static final String GET_QUERY_RESULT = "SELECT * FROM PROD WHERE BEAN_CONTRY LIKE ? AND PROC LIKE ? AND ROAST LIKE ? AND PROD_NAME LIKE ? AND PROD_STAT='上架' order by prod_no desc";
 	private static final String GET_ONE_NO_IMG_STMT = "SELECT "
 			+ "PROD_NO,"
 			+ "STORE_NO," 
