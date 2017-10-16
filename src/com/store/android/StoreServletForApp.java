@@ -121,8 +121,11 @@ public class StoreServletForApp extends HttpServlet {
 			prodList = new ArrayList<ProdVO>();
 			String storeNo = jsonObject.get("store_no").getAsString();
 			prodSet = storeSvc.getProdsByStoreNoImg(storeNo);
+			
 			for(ProdVO prodVO : prodSet){
-				prodList.add(prodVO);
+				if(prodVO.getProd_stat().equals("上架")){
+					prodList.add(prodVO);
+				}
 			}
 			outStr = gson.toJson(prodList);
 			response.setContentType(CONTENT_TYPE);

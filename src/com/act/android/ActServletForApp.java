@@ -151,7 +151,6 @@ public class ActServletForApp extends HttpServlet {
 			String mem_ac = jsonObject.get("mem_ac").getAsString();
 			System.out.println(mem_ac);
 			getFo_actVO = fo_actSvc.getFo_actByMem_ac(mem_ac);
-			System.out.println(getFo_actVO.toString());
 
 			outStr = gson.toJson(getFo_actVO);
 			System.out.println(outStr);
@@ -162,12 +161,21 @@ public class ActServletForApp extends HttpServlet {
 		} else if(action.equals("getPartiAct")){
 		//取得參加的活動
 			getPair_actVO = new ArrayList<Act_pairVO>();
+			actList = new ArrayList<ActVO>();
 			String mem_ac = jsonObject.get("mem_ac").getAsString();
 			System.out.println(mem_ac);
 			getPair_actVO = actSvc.getAct_pairByMem_ac(mem_ac);
 			System.out.println(getPair_actVO.toString());
+			for(Act_pairVO actPair : getPair_actVO){
+				ActVO actVO = actSvc.getOneNoImg(actPair.getAct_no());
+				if(!actVO.getMem_ac().equals(mem_ac)){
+					actList.add(actVO);
+				}
+				
+			}
+			
 
-			outStr = gson.toJson(getPair_actVO);
+			outStr = gson.toJson(actList);
 			System.out.println(outStr);
 			response.setContentType(CONTENT_TYPE);
 			PrintWriter out = response.getWriter();
@@ -180,7 +188,7 @@ public class ActServletForApp extends HttpServlet {
 			System.out.println(mem_ac);
 			actHostList = actSvc.getAllActByMem_acNoImg(mem_ac);
 			System.out.println(getPair_actVO.toString());
-
+			
 			outStr = gson.toJson(actHostList);
 			System.out.println(outStr);
 			response.setContentType(CONTENT_TYPE);
@@ -275,12 +283,18 @@ public class ActServletForApp extends HttpServlet {
 			getMem_pair_actVO = new HashSet<Act_pairVO>();
 			Act_pairVO act_pairVO = new Act_pairVO();
 			String act_no = jsonObject.get("act_no").getAsString();
+			String mem_ac = jsonObject.get("mem_ac").getAsString();
+			System.out.println(mem_ac);
 			getMem_pair_actVO = actSvc.getAct_pairByAct_no1(act_no);
 			
 			Iterator<Act_pairVO> pairListIt = getMem_pair_actVO.iterator();
 			
+			//刪除舉辦者自己
 			while (pairListIt.hasNext()){
-				getPair_actVO.add((Act_pairVO) pairListIt.next());	
+				Act_pairVO actPair = pairListIt.next();
+				if(!actPair.getMem_ac().equals(mem_ac)){
+					getPair_actVO.add(actPair);	
+				}
 			}
 	
 			outStr = gson.toJson(getPair_actVO);

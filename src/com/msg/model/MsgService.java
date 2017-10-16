@@ -22,7 +22,7 @@ public class MsgService {
 		msgVO.setMem_sen(mem_sen);
 		msgVO.setMem_rec(mem_rec);
 		msgVO.setMsg_cont(msg_cont);
-		msgVO.setMsg_stat("未讀");
+		msgVO.setMsg_stat("開啟");
 		dao.insert(msgVO);
 	}
 }

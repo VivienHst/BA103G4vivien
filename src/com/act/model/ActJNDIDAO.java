@@ -55,7 +55,7 @@ public class ActJNDIDAO implements ActDAO_interface{
 	private static final String DELETE_ACT_PAIR="delete from act_pair where act_no=?";
 	private static final String DELETE_FO_ACT="delete from fo_act where act_no=?";
 	private static final String GET_ACT_COMM_ByAct_no_STMT="SELECT * FROM ACT_COMM WHERE ACT_NO=? ORDER BY ACT_NO";
-	private static final String GET_ACT_PAIR_ByAct_no_STMT="SELECT * FROM ACT_PAIR WHERE ACT_NO=? ORDER BY ACT_NO";
+	private static final String GET_ACT_PAIR_ByAct_no_STMT="SELECT * FROM ACT_PAIR WHERE ACT_NO=? ORDER BY CHK_STATE";
 	private static final String GET_FO_ACT_ByAct_no_STMT="SELECT * FROM FO_ACT WHERE ACT_NO=? ORDER BY ACT_NO";
 	private static final String FIND_MEM_COUNT_BY_ACT_NO="SELECT MEM_COUNT FROM ACT WHERE ACT_NO=?";
 	private static final String ADD_ONE_TO_MEM_COUNT="update act set MEM_COUNT=? where act_no=?";

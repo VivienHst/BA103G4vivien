@@ -44,6 +44,31 @@ public class MemService {
 		dao.insert(memVO, mem_pic);
 	}
 	
+	public MemVO addPtToMem(String mem_ac, Integer pt) {
+		MemVO memVO = dao.findByPrimaryKey(mem_ac);
+		Integer mem_total_pt = memVO.getMem_total_pt()+pt;
+		Integer mem_pt = memVO.getMem_pt()+pt;
+		Integer grade_no;
+		 if(mem_total_pt<=100){
+			  grade_no=1;
+		  }else if(mem_total_pt<=200){
+			  grade_no=2;
+		  }else if(mem_total_pt<=300){
+			  grade_no=3;
+		  }else if(mem_total_pt<=400){
+			  grade_no=4;
+		  }else if(mem_total_pt<=500){
+			  grade_no=5;
+		  }else{
+			  grade_no=6;
+		  }
+		 memVO.setGrade_no(grade_no);
+		 memVO.setMem_total_pt(mem_total_pt);
+		 memVO.setMem_pt(mem_pt);
+		 dao.update(memVO);
+		return memVO;
+	}
+	
 	public MemVO updateMem(String mem_ac, String mem_pwd, String mem_lname,
 			String mem_fname, String mem_email, String mem_phone, String mem_add,
 			byte[] mem_pic, String mem_set, Integer mem_total_pt, Integer mem_pt,

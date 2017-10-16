@@ -18,6 +18,8 @@ import com.beanlife.android.tool.ImageUtil;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
+import com.mem.model.MemService;
+import com.ord.model.OrdService;
 import com.review.model.ReviewService;
 import com.review.model.ReviewVO;
 import com.review.model.ReviewService;
@@ -75,6 +77,7 @@ public class ReviewServletForApp extends HttpServlet {
 		System.out.println("action : " + action );
 		String outStr = "";
 		if(action.equals("getProdReview")){//getByProd(String prod_no)
+			//取得商品評論
 			String prod_no = jsonObject.get("prod_no").getAsString();
 			list = reviewSvc.getVOByProd(prod_no);
 			reviewList = new ArrayList<ReviewVO>();
@@ -89,18 +92,17 @@ public class ReviewServletForApp extends HttpServlet {
 		} else if(action.equals("insertReview")){
 			//新增評論
 			String getReviewVO = jsonObject.get("reviewVO").getAsString();
+			String mem_ac = jsonObject.get("mem_ac").getAsString();
 			ReviewVO reviewVO = new ReviewVO();
 			reviewVO = gson.fromJson(getReviewVO, ReviewVO.class);
 			System.out.println(reviewVO.getOrd_no());
 			System.out.println(reviewVO.getProd_no());
-			System.out.println(reviewVO.getProd_score());
-			System.out.println(reviewVO.getUse_way());
-			System.out.println(reviewVO.getRev_cont());
-			System.out.println(reviewVO.getRev_date());
 		                                                                                                                
-			ReviewVO rvo = reviewSvc.addReview(reviewVO.getOrd_no(),reviewVO.getProd_no() , reviewVO.getProd_score(),
+			reviewSvc.addReview(reviewVO.getOrd_no(),reviewVO.getProd_no() , reviewVO.getProd_score(),
 					reviewVO.getUse_way(), reviewVO.getRev_cont(), (Date)reviewVO.getRev_date());
-
+			MemService memSvc = new MemService();
+			memSvc.addPtToMem(mem_ac, 5);
+			
 			outStr = gson.toJson("true");
 			response.setContentType(CONTENT_TYPE);
 			PrintWriter out = response.getWriter();
